@@ -1,0 +1,313 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 20px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+main {
+    padding: 2rem;
+}
+
+.filter-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.filter-options select {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.event-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    transition: transform 0.2s;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.event-card h2 {
+    margin-top: 0;
+}
+
+.event-date {
+    color: #666;
+    font-style: italic;
+}
+
+.event-origin {
+    font-weight: bold;
+    color: #333;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Estilos existentes (body, header, etc.) permanecem os mesmos */
+
+.event-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.event-card h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+}
+
+.event-info {
+    color: #555;
+    margin: 4px 0;
+}
+
+.event-origin {
+    font-weight: bold;
+    color: #333;
+    margin: 8px 0;
+}
+
+.btn-details {
+    display: inline-block;
+    background-color: #0056b3; /* Tom de azul mais alinhado com SENAI/SESI */
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: auto; /* Alinha o botão na base do card */
+    text-align: center;
+    font-weight: bold;
+}
+
+/* --- Estilos do Modal --- */
+
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed; /* Fica sobre todo o conteúdo */
+    z-index: 1000; /* Garante que esteja na frente */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Habilita scroll se necessário */
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo preto semi-transparente */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% do topo e centralizado horizontalmente */
+    padding: 25px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    position: relative;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#modal-title {
+    color: #0056b3;
+}
+/* Adicione estas regras ao seu CSS */
+
+.filter-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-events-message {
+    grid-column: 1 / -1; /* Faz a mensagem ocupar toda a largura do grid */
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 3rem;
+}
+body {
+    display: flex;
+    flex-direction: column; 
+    min-height: 100vh;     
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f0f2f5; /* Cor de fundo suave */
+}
+
+/* Container principal para centralizar o conteúdo */
+.form-container {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Card do formulário */
+.form-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Largura máxima do formulário */
+    box-sizing: border-box;
+}
+
+/* Título do formulário (h2) */
+.form-card h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #333;
+    font-family: 'Montserrat', sans-serif; /* Fonte mais moderna para títulos */
+}
+
+/* Rótulos (labels) dos campos */
+.form-card label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Campos de entrada (input) */
+.form-card input[type="text"],
+.form-card input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+/* Botão de submissão */
+.form-card .submit-button {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #5b7086; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.form-card .submit-button:hover {
+    background-color: #4e5d6d;
+}
+
+/* Texto secundário e link para cadastro */
+.form-card .secondary-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.form-card .secondary-text a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form-card .secondary-text a:hover {
+    text-decoration: underline;
+}
