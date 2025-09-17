@@ -44,18 +44,19 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
 }
 ?>
 <main>
-    <section class="filter-section">
-         <h1>Eventos Abertos</h1>
-            <div class="filter-options">
-                <label for="event-origin">Filtrar por Origem:</label>
-                <select id="event-origin">
-                    <option value="todos">Todos</option>
-                    <option value="sesi">SESI</option>
-                    <option value="senai">SENAI</option>
-                </select>
-            </div>
-        </section>
-
+<section class="filter-section">
+    <h1>Eventos Abertos</h1>
+    
+    <form method="GET" action="index.php" class="filter-form">
+        <label for="event-origin">Filtrar por Origem:</label>
+        <select id="event-origin" name="origem" onchange="this.form.submit()">
+            <option value="todos" <?= ($filtro_origem == 'todos') ? 'selected' : '' ?>>Todos</option>
+            <option value="sesi" <?= ($filtro_origem == 'sesi') ? 'selected' : '' ?>>SESI</option>
+            <option value="senai" <?= ($filtro_origem == 'senai') ? 'selected' : '' ?>>SENAI</option>
+        </select>
+    </form>
+    
+</section>
     <section class="events-grid container">
     <?php if (!empty($eventos)): ?>
         <?php foreach ($eventos as $evento):

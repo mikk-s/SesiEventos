@@ -24,9 +24,9 @@ include_once("helpers/url.php");
 
 <header class="header">
     <div class="container">
-      <a href="index.php">
-          <img src="img/logo_senai.png" alt="Logo" class="logo-img">
+      <a href="index.php" class="logo">
           <img src="img/logo_sesi.png" alt="Logo" class="logo-img">
+          <img src="img/logo_senai.png" alt="Logo" class="logo-img">
       </a>
       <nav class="nav">
           <a href="index.php">Eventos</a>
@@ -41,8 +41,7 @@ include_once("helpers/url.php");
               
               <?php if (isset($_SESSION['perm']) && $_SESSION['perm'] === 'Administrador'): ?>
                   <a href="dashboard.php">Dashboard</a>
-                  <a href="gerenciar_usuarios.php">Gerenciar Usuários</a>
-                  <a href="gerenciar_locais.php">Gerenciar Locais</a>
+                
               <?php endif; ?>
 
               <a href="deslogar.php">Sair</a>

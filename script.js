@@ -40,19 +40,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isUsuarioLogado) {
                 if (isUsuarioInscrito) {
-                    actionHtml = '<button class="btn-inscrito" disabled>Você já está inscrito</button>';
+                    actionHtml = '<button class="submit-button" disabled>Você já está inscrito</button>';
                 } else if (vagasRestantes <= 0) {
-                    actionHtml = '<button class="btn-esgotado" disabled>Ingressos Esgotados</button>';
+                    actionHtml = '<button class="submit-button" disabled>Ingressos Esgotados</button>';
                 } else {
                     actionHtml = `
                         <form method="POST" action="adquirir_ingresso.php" style="margin: 0;">
                             <input type="hidden" name="id_evento" value="${eventoId}">
-                            <button type="submit" class="btn-adquirir">Adquirir Ingresso</button>
+                            <button type="submit" class="submit-button">Adquirir Ingresso</button>
                         </form>
                     `;
                 }
             } else {
-                actionHtml = '<a href="login.php" class="btn-login-adquirir">Faça login para adquirir</a>';
+                actionHtml = '<a href="login.php" class="submit-button">Faça login para adquirir</a>';
             }
 
             // 3. Insere o HTML do botão no container do modal

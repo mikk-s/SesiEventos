@@ -115,7 +115,9 @@ h1, h2, h3 {
 /* Campos de Formulário */
 .form-card form input, 
 .form-card form select, 
-.form-card form textarea {
+.form-card form textarea,
+.form-card form button
+{
     width: 100%;
     padding: 0.8rem;
     margin-bottom: 1rem;
@@ -144,6 +146,10 @@ h1, h2, h3 {
 .logo-img {
     max-width: 160px;
     height: auto;
+   
+}
+.logo{
+     text-decoration: none;
 }
 
 .nav a {
@@ -305,7 +311,7 @@ h1, h2, h3 {
 }
 
 /* Regra de escurecimento removida */
-/*
+
 .login-image-side::before {
     content: '';
     position: absolute;
@@ -314,8 +320,8 @@ h1, h2, h3 {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.2);
-}
-*/
+} 
+
 
 .login-form-side {
     flex: 1;
@@ -372,4 +378,65 @@ h1, h2, h3 {
     .login-form-side {
         padding: 1.5rem;
     }
+}
+
+/* Estilos para o Fundo do Modal (Overlay) */
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed; /* Fica fixo na tela, sobrepondo o resto */
+    z-index: 1000; /* Garante que fique na frente de tudo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Permite rolagem se o conteúdo for grande */
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo preto semi-transparente */
+}
+
+/* Estilos para o Conteúdo do Modal (a caixa branca) */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% do topo e centralizado horizontalmente */
+    padding: 25px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px; /* Largura máxima */
+    border-radius: 8px;
+    position: relative; /* Necessário para posicionar o botão de fechar */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+/* Estilos para o Botão de Fechar (o "X") */
+.close-button {
+    color: #aaa;
+    position: absolute; /* Posição relativa ao .modal-content */
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos para a área de ação (botões de inscrição) */
+#modal-action {
+    margin-top: 20px;
+    text-align: right; /* Alinha o botão à direita */
+}
+
+.filter-section{
+    text-align: center;
+}
+.filter-section select {
+    
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
 }
