@@ -3,7 +3,7 @@ session_start();
 require_once 'conexao.php';
 
 // 1. Verifica se o usuário está logado
-if (!isset($_SESSION["usuario_id"])) {
+if (!isset($_SESSION["usuario"])) {
     $_SESSION['erro'] = "Você precisa estar logado para adquirir um ingresso.";
     header("Location: login.php");
     exit();

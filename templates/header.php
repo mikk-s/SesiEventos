@@ -25,7 +25,7 @@ include_once("helpers/url.php");
             <img src="img/logo_senai.png" alt="Logo SENAI Horto" class="logo">
         </div>
   
-        <nav>
+      <nav>
             <ul>
                 <li><a href="index.php">Início</a></li>
                 
@@ -34,11 +34,16 @@ include_once("helpers/url.php");
                     
                     <?php if (isset($_SESSION["perm"])): ?>
                         <?php // Link para Cadastrar Evento (Organizador ou Admin)
-                        if ($_SESSION["perm"] == "Organizador" || $_SESSION["perm"] == "Administrador"): ?>
+                        if (in_array($_SESSION["perm"], ["Organizador", "Administrador"])): ?>
                             <li><a href="cadastrar_evento.php">Cadastrar Evento</a></li>
                         <?php endif; ?>
 
-                        <?php // LINK DO PAINEL ADMIN (Apenas Administrador)
+                        <?php // NOVO: Link para Gerenciar Eventos (Apenas Organizador)
+                        if ($_SESSION["perm"] == "Organizador"): ?>
+                            <li><a href="gerenciar_eventos.php">Gerenciar Eventos</a></li>
+                        <?php endif; ?>
+
+                        <?php // Link do Painel Admin (Apenas Administrador)
                         if ($_SESSION["perm"] == "Administrador"): ?>
                             <li><a href="dashboard.php" style="color: #ffc107; font-weight: bold;">Dashboard</a></li>
                         <?php endif; ?>
