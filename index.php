@@ -45,6 +45,15 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
 ?>
 <main>
     <section class="filter-section">
+         <h1>Eventos Abertos</h1>
+            <div class="filter-options">
+                <label for="event-origin">Filtrar por Origem:</label>
+                <select id="event-origin">
+                    <option value="todos">Todos</option>
+                    <option value="sesi">SESI</option>
+                    <option value="senai">SENAI</option>
+                </select>
+            </div>
         </section>
 
     <section class="events-grid">

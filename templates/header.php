@@ -24,37 +24,32 @@ include_once("helpers/url.php");
             <img src="img/logo_sesi.png" alt="Logo SESI Horto" class="logo">
             <img src="img/logo_senai.png" alt="Logo SENAI Horto" class="logo">
         </div>
+  
         <nav>
-    <ul>
-        <li><a href="index.php">Início</a></li>
-       
-        
-        <?php 
-        // Verifica se o usuário está logado
-        if (isset($_SESSION["usuario"])): 
-        ?>
-               <li><a href="eventos.php">Meus Ingressos</a></li>
-            <?php
-            // Se estiver logado, verifica se tem permissão para cadastrar evento
-            if (isset($_SESSION["perm"]) && ($_SESSION["perm"] == "Organizador" || $_SESSION["perm"] == "Administrador")): 
-            ?>
-                <li><a href="cadastrar_evento.php">Cadastrar Evento</a></li>
-            <?php 
-            endif; 
-            ?>
+            <ul>
+                <li><a href="index.php">Início</a></li>
+                
+                <?php if (isset($_SESSION["usuario"])): ?>
+                    <li><a href="eventos.php">Meus Ingressos</a></li>
+                    
+                    <?php if (isset($_SESSION["perm"])): ?>
+                        <?php // Link para Cadastrar Evento (Organizador ou Admin)
+                        if ($_SESSION["perm"] == "Organizador" || $_SESSION["perm"] == "Administrador"): ?>
+                            <li><a href="cadastrar_evento.php">Cadastrar Evento</a></li>
+                        <?php endif; ?>
 
-            <li><a href="deslogar.php">Sair</a></li>
+                        <?php // LINK DO PAINEL ADMIN (Apenas Administrador)
+                        if ($_SESSION["perm"] == "Administrador"): ?>
+                            <li><a href="dashboard.php" style="color: #ffc107; font-weight: bold;">Dashboard</a></li>
+                        <?php endif; ?>
+                    <?php endif; ?>
 
-        <?php 
-        else: 
-        // Se NÃO estiver logado, mostra o link de LOGIN
-        ?>
-            <li><a href="login.php">Login</a></li>
-        <?php 
-        endif; 
-        ?>
-    </ul>
-</nav>
+                    <li><a href="deslogar.php">Sair</a></li>
+                <?php else: ?>
+                    <li><a href="login.php">Login</a></li>
+                <?php endif; ?>
+            </ul>
+        </nav>
     </header>
 </body>
 </html>
