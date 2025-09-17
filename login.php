@@ -24,13 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->execute();
 
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
     if ($usuario) {
         if (password_verify($senha, $usuario["senha"])) {
+            // ** ATUALIZAÇÃO IMPORTANTE AQUI **
+            $_SESSION["usuario_id"] = $usuario['id']; // <-- ADICIONADO
             $_SESSION["usuario"] = $usuario['nome'];
             $_SESSION["perm"] = $usuario['perm']; 
-            header("Location: index.php");
-            
+    
+            header("Location: index.php"); // Redirecionar para o index é mais comum após o login
             exit();
         } else {
             $_SESSION["erro"] = "Senha incorreta.";

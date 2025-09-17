@@ -1,64 +1,64 @@
 <?php
-// Inclui o arquivo de conexão
+session_start();
 require_once 'conexao.php';
 
-// --- LÓGICA DE FILTRAGEM ---
-// Pega a origem do filtro da URL (via GET). Se não existir, o padrão é 'todos'.
+// --- LÓGICA DE FILTRAGEM E DADOS ---
 $filtro_origem = $_GET['origem'] ?? 'todos';
+$eventos_usuario_inscrito = [];
 
-// Prepara a base da consulta SQL
-$sql = "SELECT * FROM eventos";
-$params = [];
-
-// Adiciona a condição WHERE se um filtro específico (SESI ou SENAI) for selecionado
-if ($filtro_origem !== 'todos') {
-    $sql .= " WHERE origem = ?";
-    $params[] = $filtro_origem;
-}
-
-// Ordena os eventos pela data mais próxima
-$sql .= " ORDER BY data ASC";
-
-// Executa a consulta
 try {
+    $sql = "SELECT eventos.*, COUNT(inscricoes.id) AS inscritos 
+            FROM eventos 
+            LEFT JOIN inscricoes ON eventos.id = inscricoes.id_evento";
+    
+    $params = [];
+    if ($filtro_origem !== 'todos') {
+        $sql .= " WHERE origem = ?";
+        $params[] = $filtro_origem;
+    }
+
+    $sql .= " GROUP BY eventos.id ORDER BY data ASC";
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $eventos = $stmt->fetchAll();
+
+    if (isset($_SESSION['usuario_id'])) {
+        $stmt_inscrito = $conn->prepare("SELECT id_evento FROM inscricoes WHERE id_usuario = ?");
+        $stmt_inscrito->execute([$_SESSION['usuario_id']]);
+        $eventos_usuario_inscrito = $stmt_inscrito->fetchAll(PDO::FETCH_COLUMN);
+    }
 } catch (PDOException $e) {
-    // Em caso de erro, define $eventos como um array vazio e exibe uma mensagem
     $eventos = [];
-    echo "Erro ao buscar eventos: " . $e->getMessage(); // Idealmente, logar o erro
+    echo "Erro ao buscar eventos: " . $e->getMessage();
 }
 
-// Inclui o cabeçalho da página
 include_once("templates/header.php");
-?>
 
+
+// Exibe mensagens de sucesso ou erro vindas de outras páginas
+if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
+    $mensagem = $_SESSION['mensagem'] ?? $_SESSION['erro'];
+    echo "<script>alert('" . addslashes($mensagem) . "');</script>";
+    unset($_SESSION['mensagem']);
+    unset($_SESSION['erro']);
+}
+?>
 <main>
     <section class="filter-section">
-        <h1>Eventos Abertos</h1>
-        <form method="GET" action="index.php" class="filter-form">
-            <label for="event-origin">Filtrar por Origem:</label>
-            <select id="event-origin" name="origem" onchange="this.form.submit()">
-                <option value="todos" <?= ($filtro_origem == 'todos') ? 'selected' : '' ?>>Todos</option>
-                <option value="sesi" <?= ($filtro_origem == 'sesi') ? 'selected' : '' ?>>SESI</option>
-                <option value="senai" <?= ($filtro_origem == 'senai') ? 'selected' : '' ?>>SENAI</option>
-            </select>
-        </form>
-    </section>
+        </section>
 
     <section class="events-grid">
         <?php if (count($eventos) > 0): ?>
             <?php foreach ($eventos as $evento): ?>
                 <?php
-                    // Formata a data para um formato mais legível
                     $data_formatada = (new DateTime($evento['data']))->format('d/m/Y, H:i');
+                    $vagas_restantes = $evento['max_pessoas'] - $evento['inscritos'];
                 ?>
                 <div class="event-card">
                     <h2><?= htmlspecialchars($evento['nome']) ?></h2>
                     <p class="event-info"><strong>Data:</strong> <?= $data_formatada ?></p>
                     <p class="event-info"><strong>Local:</strong> <?= htmlspecialchars($evento['local']) ?></p>
-                    <p class="event-info"><strong>Vagas:</strong> <?= htmlspecialchars($evento['max_pessoas']) ?></p>
+                    <p class="event-info"><strong>Vagas Restantes:</strong> <?= $vagas_restantes ?></p>
                     <p class="event-origin">Origem: <?= htmlspecialchars($evento['origem']) ?></p>
                     
                     <a href="#" class="btn-details"
@@ -66,10 +66,15 @@ include_once("templates/header.php");
                        data-data="<?= $data_formatada ?>"
                        data-local="<?= htmlspecialchars($evento['local']) ?>"
                        data-pessoas="<?= htmlspecialchars($evento['max_pessoas']) ?>"
-                       data-descricao="<?= htmlspecialchars($evento['descricao_completa']) ?>">
+                       data-descricao="<?= htmlspecialchars($evento['descricao_completa']) ?>"
+                       data-evento-id="<?= $evento['id'] ?>"
+                       data-vagas-restantes="<?= $vagas_restantes ?>"
+                       data-usuario-logado="<?= isset($_SESSION['usuario_id']) ? 'true' : 'false' ?>"
+                       data-usuario-inscrito="<?= in_array($evento['id'], $eventos_usuario_inscrito) ? 'true' : 'false' ?>">
                        Saiba Mais
                     </a>
-                </div>
+
+                    </div>
             <?php endforeach; ?>
         <?php else: ?>
             <p class="no-events-message">Sem eventos no momento.</p>
@@ -77,8 +82,6 @@ include_once("templates/header.php");
     </section>
 </main>
 
-
 <?php
-// Inclui o rodapé da página
 include_once("templates/footer.php");
 ?>

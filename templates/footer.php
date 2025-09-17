@@ -10,6 +10,9 @@
             <p id="modal-location"></p>
             <p id="modal-capacity"></p>
             <p id="modal-description"></p>
+
+            <div id="modal-action" class="event-action"></div>
+
         </div>
     </div>
 

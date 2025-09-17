@@ -25,15 +25,36 @@ include_once("helpers/url.php");
             <img src="img/logo_senai.png" alt="Logo SENAI Horto" class="logo">
         </div>
         <nav>
-            <ul>
-                <li><a href="#">Início</a></li>
+    <ul>
+        <li><a href="index.php">Início</a></li>
+       
+        
+        <?php 
+        // Verifica se o usuário está logado
+        if (isset($_SESSION["usuario"])): 
+        ?>
+               <li><a href="eventos.php">Meus Ingressos</a></li>
+            <?php
+            // Se estiver logado, verifica se tem permissão para cadastrar evento
+            if (isset($_SESSION["perm"]) && ($_SESSION["perm"] == "Organizador" || $_SESSION["perm"] == "Administrador")): 
+            ?>
                 <li><a href="cadastrar_evento.php">Cadastrar Evento</a></li>
-                <li><a href="#">Eventos</a></li>
-                <li><a href="login.php">Login</a></li>
-               
+            <?php 
+            endif; 
+            ?>
 
-            </ul>
-        </nav>
+            <li><a href="deslogar.php">Sair</a></li>
+
+        <?php 
+        else: 
+        // Se NÃO estiver logado, mostra o link de LOGIN
+        ?>
+            <li><a href="login.php">Login</a></li>
+        <?php 
+        endif; 
+        ?>
+    </ul>
+</nav>
     </header>
 </body>
 </html>
