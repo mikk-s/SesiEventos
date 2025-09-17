@@ -30,7 +30,7 @@ include_once("helpers/url.php");
                 <li><a href="cadastrar_evento.php">Cadastrar Evento</a></li>
                 <li><a href="#">Eventos</a></li>
                 <li><a href="login.php">Login</a></li>
-                <li><a href="cadastro.php">Cadastro</a></li>
+               
 
             </ul>
         </nav>

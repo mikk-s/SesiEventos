@@ -77,6 +77,7 @@ include_once("templates/header.php");
     </section>
 </main>
 
+
 <?php
 // Inclui o rodapé da página
 include_once("templates/footer.php");
