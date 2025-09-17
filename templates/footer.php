@@ -1,6 +1,8 @@
-<footer>
-        <p>&copy; <?= date('Y') ?> Sistema de Gerenciamento de Eventos - SESI/SENAI Horto. Todos os direitos reservados.</p>
-    </footer>
+<footer class="footer">
+    <div class="container">
+        <p>&copy; <?= date('Y') ?> SESI Eventos. Todos os direitos reservados.</p>
+    </div>
+</footer>
 
     <div id="event-modal" class="modal">
         <div class="modal-content">

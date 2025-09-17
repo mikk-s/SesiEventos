@@ -56,21 +56,22 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
             </div>
         </section>
 
-    <section class="events-grid">
-        <?php if (count($eventos) > 0): ?>
-            <?php foreach ($eventos as $evento): ?>
-                <?php
-                    $data_formatada = (new DateTime($evento['data']))->format('d/m/Y, H:i');
-                    $vagas_restantes = $evento['max_pessoas'] - $evento['inscritos'];
-                ?>
-                <div class="event-card">
-                    <h2><?= htmlspecialchars($evento['nome']) ?></h2>
-                    <p class="event-info"><strong>Data:</strong> <?= $data_formatada ?></p>
-                    <p class="event-info"><strong>Local:</strong> <?= htmlspecialchars($evento['local']) ?></p>
-                    <p class="event-info"><strong>Vagas Restantes:</strong> <?= $vagas_restantes ?></p>
-                    <p class="event-origin">Origem: <?= htmlspecialchars($evento['origem']) ?></p>
+    <section class="events-grid container">
+    <?php if (!empty($eventos)): ?>
+        <?php foreach ($eventos as $evento):
+            $vagas_restantes = $evento['max_pessoas'] - $evento['inscritos'];
+            $data_formatada = (new DateTime($evento['data']))->format('d/m/Y, H:i');
+        ?>
+            <div class="event-card card">
+                <div class="event-card-image"></div> 
+                
+                <div class="event-card-content">
+                    <h3><?= htmlspecialchars($evento['nome']) ?></h3>
+                    <p class="event-info">Data: <?= $data_formatada ?></p>
+                    <p class="event-info">Local: <?= htmlspecialchars($evento['local']) ?></p>
+                    <p class="event-info">Vagas: <?= $vagas_restantes ?> de <?= htmlspecialchars($evento['max_pessoas']) ?></p>
                     
-                    <a href="#" class="btn-details"
+                    <a href="#" class="btn-primary btn-details"
                        data-nome="<?= htmlspecialchars($evento['nome']) ?>"
                        data-data="<?= $data_formatada ?>"
                        data-local="<?= htmlspecialchars($evento['local']) ?>"
@@ -82,13 +83,13 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
                        data-usuario-inscrito="<?= in_array($evento['id'], $eventos_usuario_inscrito) ? 'true' : 'false' ?>">
                        Saiba Mais
                     </a>
-
-                    </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p class="no-events-message">Sem eventos no momento.</p>
-        <?php endif; ?>
-    </section>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="no-events-message">Sem eventos no momento.</p>
+    <?php endif; ?>
+</section>
 </main>
 
 <?php

@@ -1,368 +1,375 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #f4f4f4;
+/* ================================================= */
+/* 1. CONFIGURAÇÃO GERAL E VARIÁVEIS       */
+/* ================================================= */
+
+/* Paleta de Cores */
+:root {
+    --primary-color: #0056b3;
+    --background-color: #f6f6f6;
+    --card-background: #fff;
+    --text-color-dark: #212121;
+    --text-color-light: #fff;
+    --text-color-secondary: #6e6e6e;
+    --border-color: #e0e0e0;
+    --box-shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-header {
-    background-color: #fff;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #ddd;
-}
+/* Importação de Fontes do Google */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
 
-.logo-container {
-    display: flex;
-    align-items: center;
-}
-
-.logo {
-    height: 50px;
-    margin-right: 20px;
-}
-
-nav ul {
-    list-style: none;
+/* Reset de Estilos Padrão */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    display: flex;
 }
 
-nav ul li {
-    margin-left: 20px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-}
-
-main {
-    padding: 2rem;
-}
-
-.filter-section {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.filter-options select {
-    padding: 0.5rem;
-    font-size: 1rem;
-}
-
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.event-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1.5rem;
-    transition: transform 0.2s;
-}
-
-.event-card:hover {
-    transform: translateY(-5px);
-}
-
-.event-card h2 {
-    margin-top: 0;
-}
-
-.event-date {
-    color: #666;
-    font-style: italic;
-}
-
-.event-origin {
-    font-weight: bold;
-    color: #333;
-}
-
-.btn {
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 1rem;
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-/* Estilos existentes (body, header, etc.) permanecem os mesmos */
-
-.event-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1.5rem;
-    transition: transform 0.2s;
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color-dark);
+    line-height: 1.6;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+/* Container Principal (centraliza o conteúdo) */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+/* ================================================= */
+/* 2. LAYOUT E COMPONENTES DE UI         */
+/* ================================================= */
+
+/* Botões */
+.btn, .submit-button, .btn-primary {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    border: none;
+    font-family: 'Poppins', sans-serif; /* Fonte para o botão */
+}
+
+.btn-primary, .submit-button {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+.btn-primary:hover, .submit-button:hover {
+    background-color: #004494;
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-subtle);
+}
+
+/* Botões de ação na tabela */
+.btn-editar, .btn-excluir {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.btn-editar {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+.btn-excluir {
+    background-color: #dc3545; /* Vermelho padrão para exclusão */
+    color: var(--text-color-light);
+}
+
+/* Formulários e Cartões */
+.form-card, .card {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow-subtle);
+    transition: box-shadow 0.3s ease;
+}
+
+.form-card:hover, .card:hover {
+    box-shadow: var(--box-shadow-hover);
+}
+
+/* Títulos */
+h1, h2, h3 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color-dark);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Campos de Formulário */
+.form-card form input, 
+.form-card form select, 
+.form-card form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* ================================================= */
+/* 3. LAYOUT E SEÇÕES                  */
+/* ================================================= */
+
+/* Cabeçalho */
+.header {
+    background-color: var(--card-background);
+    padding: 1.5rem 0;
+    box-shadow: var(--box-shadow-subtle);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-img {
+    max-width: 160px;
+    height: auto;
+}
+
+.nav a {
+    color: var(--text-color-dark);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 2rem;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav a:hover {
+    color: var(--primary-color);
+}
+
+/* Efeito de hover do Sympla nos links */
+.nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: -8px;
+    left: 0;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav a:hover::after {
+    width: 100%;
+}
+
+/* Rodapé */
+.footer {
+    background-color: var(--text-color-dark);
+    color: var(--text-color-light);
+    text-align: center;
+    padding: 2.5rem 0;
+    margin-top: auto;
+}
+.footer a {
+    color: var(--text-color-light);
+    text-decoration: none;
+}
+.footer a:hover {
+    color: var(--primary-color);
+}
+
+/* Layout de Eventos (Grid) */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem; /* Espaçamento entre os cards */
+    margin-top: 2rem;
+}
+
+.event-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Para que a imagem não saia das bordas */
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
 .event-card:hover {
     transform: translateY(-5px);
 }
 
-.event-card h2 {
-    margin-top: 0;
+.event-card-image {
+    width: 100%;
+    height: 150px; /* Altura fixa para as imagens */
+    object-fit: cover;
+    background-color: #ddd; /* Placeholder para quando não houver imagem */
+}
+
+.event-card-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Faz o conteúdo ocupar todo o espaço vertical disponível */
+}
+
+.event-card-content h3 {
     font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+.event-card-content p {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+    margin-bottom: 0.25rem;
+}
+.event-card-content .btn-details {
+    margin-top: auto; /* Empurra o botão para o final do card */
 }
 
-.event-info {
-    color: #555;
-    margin: 4px 0;
-}
-
-.event-origin {
-    font-weight: bold;
-    color: #333;
-    margin: 8px 0;
-}
-
-.btn-details,
-.btn-inscrito,
-.btn-esgotado,
-.btn-adquirir,
-.btn-login-adquirir{
-    display: inline-block;
-    background-color: #0056b3; /* Tom de azul mais alinhado com SENAI/SESI */
-    color: #fff;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: auto; /* Alinha o botão na base do card */
-    text-align: center;
-    font-weight: bold;
-}
-
-/* --- Estilos do Modal --- */
-
-.modal {
-    display: none; /* Escondido por padrão */
-    position: fixed; /* Fica sobre todo o conteúdo */
-    z-index: 1000; /* Garante que esteja na frente */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Habilita scroll se necessário */
-    background-color: rgba(0, 0, 0, 0.6); /* Fundo preto semi-transparente */
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* 10% do topo e centralizado horizontalmente */
-    padding: 25px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-    border-radius: 10px;
-    position: relative;
-    animation: fadeIn 0.5s;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#modal-title {
-    color: #0056b3;
-}
-/* Adicione estas regras ao seu CSS */
-
-.filter-form {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.no-events-message {
-    grid-column: 1 / -1; /* Faz a mensagem ocupar toda a largura do grid */
-    text-align: center;
-    font-size: 1.2rem;
-    color: #666;
-    margin-top: 3rem;
-}
-body {
-    display: flex;
-    flex-direction: column; 
-    min-height: 100vh;     
-    font-family: sans-serif;
-    margin: 0;
-    background-color: #f0f2f5; /* Cor de fundo suave */
-}
-
-/* Container principal para centralizar o conteúdo */
-.form-container {
-    flex-grow: 1; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-/* Card do formulário */
-.form-card {
-    background-color: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px; /* Largura máxima do formulário */
-    box-sizing: border-box;
-}
-
-/* Título do formulário (h2) */
-.form-card h2 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 25px;
-    color: #333;
-    font-family: 'Montserrat', sans-serif; /* Fonte mais moderna para títulos */
-}
-
-/* Rótulos (labels) dos campos */
-.form-card label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-}
-
-/* Campos de entrada (input) */
-.form-card input[type="text"],
-.form-card input[type="password"],
-.form-card input[type="email"],
-.form-card input[type="datetime-local"],
-.form-card select ,
-.form-card textarea ,
-.form-card input[type="number"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 1em;
-}
-
-/* Botão de submissão */
-.form-card .submit-button {
-    width: 100%;
-    padding: 12px 20px;
-    background-color: #5b7086; 
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-top: 10px;
-    transition: background-color 0.3s;
-}
-
-.form-card .submit-button:hover {
-    background-color: #4e5d6d;
-}
-
-/* Texto secundário e link para cadastro */
-.form-card .secondary-text {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: #666;
-}
-
-.form-card .secondary-text a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.form-card .secondary-text a:hover {
-    text-decoration: underline;
-}
-
-/* ========================================= */
-/* ESTILOS PARA TABELAS MODERNAS    */
-/* ========================================= */
-
-.table-container {
-    width: 100%;
-    overflow-x: auto; /* Garante que a tabela seja responsiva em telas pequenas */
-    margin-top: 1.5rem;
-}
-
+/* Estilo para as Tabelas de Gerenciamento */
 .styled-table {
     width: 100%;
-    border-collapse: collapse; /* Remove espaços entre as células */
-    font-size: 0.9em;
-    font-family: 'Roboto', sans-serif;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    border-collapse: collapse;
 }
 
 .styled-table thead tr {
-    background-color: #5b7086; /* Cor consistente com os botões */
-    color: #ffffff;
+    background-color: var(--background-color);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.styled-table th, .styled-table td {
+    padding: 1rem 1.25rem;
+    border: none;
     text-align: left;
 }
 
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px; /* Mais espaçamento para melhor leitura */
-}
-
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
-}
-
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3; /* Cor de zebra sutil */
-}
-
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #5b7086; /* Borda final mais forte */
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
 }
 
 .styled-table tbody tr:hover {
-    background-color: #e1e8ed; /* Efeito hover mais suave */
-    color: #333;
+    background-color: #efefef;
+}
+
+/* ================================================= */
+/* Animações e Estilo Centralizado         */
+/* ================================================= */
+
+/* 1. Container que centraliza o formulário na tela
+    Ele usa Flexbox para alinhar o conteúdo perfeitamente
+*/
+.form-container, .login-form-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+.login-form-page {
+    /* Ajustes específicos para a página de login/cadastro */
+    background-color: var(--background-color);
+}
+
+.login-split-container {
+    display: flex;
+    width: 100%;
+    max-width: 950px;
+    min-height: 550px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: var(--box-shadow-hover);
+    animation: fade-in 0.8s ease-out forwards;
+}
+
+.login-image-side {
+    flex: 1.2;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    animation: image-pan 20s ease-in-out infinite alternate;
+}
+
+/* Regra de escurecimento removida */
+/*
+.login-image-side::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+*/
+
+.login-form-side {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: var(--card-background);
+}
+
+.form-card {
+    width: 100%;
+    max-width: 400px;
+    animation: fade-in-up 0.8s ease-out forwards;
+}
+
+/* --- ANIMAÇÕES --- */
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes image-pan {
+    from { background-position: 50% 50%; }
+    to { background-position: 50% 55%; }
+}
+
+/* ================================================= */
+/* 3. RESPONSIVIDADE                  */
+/* ================================================= */
+
+@media (max-width: 768px) {
+    .login-split-container {
+        flex-direction: column;
+        height: auto;
+        border-radius: 12px;
+    }
+    .login-image-side {
+        height: 200px;
+        flex: none;
+    }
+    .login-form-side {
+        padding: 1.5rem;
+    }
 }

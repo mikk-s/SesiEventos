@@ -1,4 +1,9 @@
 <?php
+// Certifica-se de que a sessão foi iniciada
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+// Inclui o helper de URL, como você já tinha
 include_once("helpers/url.php");
 ?>
 
@@ -8,10 +13,8 @@ include_once("helpers/url.php");
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NetNucleo</title>
-
- 
+  
   <link rel="stylesheet" href="<?= $BASE_URL ?>css/style.css">
-
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,42 +22,37 @@ include_once("helpers/url.php");
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <img src="img/logo_sesi.png" alt="Logo SESI Horto" class="logo">
-            <img src="img/logo_senai.png" alt="Logo SENAI Horto" class="logo">
-        </div>
-  
-      <nav>
-            <ul>
-                <li><a href="index.php">Início</a></li>
-                
-                <?php if (isset($_SESSION["usuario"])): ?>
-                    <li><a href="eventos.php">Meus Ingressos</a></li>
-                    
-                    <?php if (isset($_SESSION["perm"])): ?>
-                        <?php // Link para Cadastrar Evento (Organizador ou Admin)
-                        if (in_array($_SESSION["perm"], ["Organizador", "Administrador"])): ?>
-                            <li><a href="cadastrar_evento.php">Cadastrar Evento</a></li>
-                        <?php endif; ?>
+<header class="header">
+    <div class="container">
+      <a href="index.php">
+          <img src="img/logo_senai.png" alt="Logo" class="logo-img">
+          <img src="img/logo_sesi.png" alt="Logo" class="logo-img">
+      </a>
+      <nav class="nav">
+          <a href="index.php">Eventos</a>
+          
+          <?php if (isset($_SESSION['usuario_id'])): ?>
+              <a href="eventos.php">Meus Ingressos</a>
 
-                        <?php // NOVO: Link para Gerenciar Eventos (Apenas Organizador)
-                        if ($_SESSION["perm"] == "Organizador"): ?>
-                            <li><a href="gerenciar_eventos.php">Gerenciar Eventos</a></li>
-                        <?php endif; ?>
+              <?php if (isset($_SESSION['perm']) && in_array($_SESSION['perm'], ['Administrador', 'Organizador'])): ?>
+                  <a href="cadastrar_evento.php">Cadastrar Evento</a>
+                  <a href="gerenciar_eventos.php">Gerenciar Eventos</a>
+              <?php endif; ?>
+              
+              <?php if (isset($_SESSION['perm']) && $_SESSION['perm'] === 'Administrador'): ?>
+                  <a href="dashboard.php">Dashboard</a>
+                  <a href="gerenciar_usuarios.php">Gerenciar Usuários</a>
+                  <a href="gerenciar_locais.php">Gerenciar Locais</a>
+              <?php endif; ?>
 
-                        <?php // Link do Painel Admin (Apenas Administrador)
-                        if ($_SESSION["perm"] == "Administrador"): ?>
-                            <li><a href="dashboard.php" style="color: #ffc107; font-weight: bold;">Dashboard</a></li>
-                        <?php endif; ?>
-                    <?php endif; ?>
+              <a href="deslogar.php">Sair</a>
 
-                    <li><a href="deslogar.php">Sair</a></li>
-                <?php else: ?>
-                    <li><a href="login.php">Login</a></li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </header>
+          <?php else: ?>
+              <a href="login.php">Login</a>
+              <a href="cadastro.php">Cadastro</a>
+          <?php endif; ?>
+      </nav>
+    </div>
+</header>
 </body>
 </html>

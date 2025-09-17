@@ -1,14 +1,12 @@
 <?php
-;
 require "conexao.php";
 session_start(); 
-
+ 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST["login"];
     $senha = $_POST["senha"];
     $nome = $_POST["nome"];
 
-    
     $checkSql = "SELECT COUNT(*) FROM usuarios WHERE email = :email and nome = :nome ";
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bindParam(":email", $email);
@@ -22,10 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
     }
 
-    
     $senhaCriptografada = password_hash($senha, PASSWORD_DEFAULT);
 
-    
     $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":email", $email);
@@ -49,25 +45,30 @@ if (isset($_SESSION["erro"])) {
 }
 include_once("templates/header.php")
 ?>
+
 <link rel="stylesheet" href="css/style.css">
 
-<main class="form-container">
-  
-    <div class="form-card"> <h2>Cadastro</h2>
+<main class="login-form-page">
+    <div class="login-split-container">
+        <div class="login-image-side" style="background-image: url('img/essa.jpg');">
+        </div>
 
-        <form method="post">
-            <label for="nome">Nome:</label>
-            <input type="text" name="nome" placeholder="Nome" required>
-            <label for="login">Login:</label>
-            <input type="email" name="login" placeholder="Login" required>
-            <label for="senha">Senha:</label>
-            <input type="password" name="senha" placeholder="Senha" required>
-            <button type="submit" class="submit-button">Cadastrar</button>
-</form>
-<?php if (!isset($_SESSION["usuario"])): ?>
-    <p class="secondary-text">Já tem uma conta? <a href="login.php">Faça login</a></p>
-    <?php endif; ?>
+        <div class="login-form-side">
+            <div class="form-card">
+                <h2>Cadastro</h2>
+                <form method="post">
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="nome" placeholder="Nome" required>
+                    <label for="login">Login (Email):</label>
+                    <input type="email" name="login" placeholder="Login" required>
+                    <label for="senha">Senha:</label>
+                    <input type="password" name="senha" placeholder="Senha" required>
+                    <button type="submit" class="submit-button">Cadastrar</button>
+                </form>
+                <p class="secondary-action">
+                    Já tem uma conta? <a href="login.php">Fazer Login</a>
+                </p>
+            </div>
+        </div>
     </div>
 </main>
-</html>
- 

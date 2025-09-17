@@ -48,31 +48,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 ?>
 <link rel="stylesheet" href="css/style.css">
-<main class="form-container">
+<main class="login-form-page">
+    <div class="login-split-container">
+        <div class="login-image-side" style="background-image: url('img/essa.jpg');">
+             
+        </div>
 
-    <div class="form-card" > <h2>Login</h2>
-        <?php
-if (isset($_SESSION["erro"])) {
-   echo "<script>alert('{$_SESSION["erro"]}');</script>";
-
-    unset($_SESSION["erro"]);
-}
-?>
-        <form method="POST">
-            
-            <label for="login">Login:</label>
-            <input type="text" id="login" name="login" required>
-            
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" required>
-            
-            <button type="submit" class="submit-button">Entrar</button>
-
-        </form>
-
-        <p class="secondary-text">
-            Não tem uma conta? <a href="cadastro.php">Cadastre-se</a>
-        </p>
-
+        <div class="login-form-side">
+            <div class="form-card">
+                <h2>Login</h2>
+                <?php
+                if (isset($_SESSION["erro"])) {
+                    echo "<script>alert('{$_SESSION["erro"]}');</script>";
+                    unset($_SESSION["erro"]);
+                }
+                ?>
+                <form method="POST">
+                    <label for="login">Login:</label>
+                    <input type="text" id="login" name="login" required>
+                    
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" name="senha" required>
+                    
+                    <button type="submit" class="submit-button">Entrar</button>
+                </form>
+                <p class="secondary-action">
+                    Não tem uma conta? <a href="cadastro.php">Cadastre-se</a>
+                </p>
+            </div>
+        </div>
     </div>
 </main>
