@@ -69,7 +69,7 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Permissão</th>
-                        <th style="width: 150px;">Ações</th>
+                        <th style="width: 220px;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,11 +81,13 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
                                 <td><?= htmlspecialchars($usuario['email']) ?></td>
                                 <td><?= htmlspecialchars($usuario['perm']) ?></td>
                                 <td>
-                                    <a href="editar_usuario.php?id=<?= $usuario['id'] ?>" class="btn-editar">Editar</a>
-                                    <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');" style="display: inline;">
-                                        <input type="hidden" name="delete_id" value="<?= $usuario['id'] ?>">
-                                        <button type="submit" class="btn-excluir">Excluir</button>
-                                    </form>
+                                    <div class="action-buttons">
+                                        <a href="editar_usuario.php?id=<?= $usuario['id'] ?>" class="btn-editar">Editar</a>
+                                        <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                            <input type="hidden" name="delete_id" value="<?= $usuario['id'] ?>">
+                                            <button type="submit" class="btn-excluir">Excluir</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -97,5 +99,4 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
         </div>
     </div>
 </main>
-<style>.btn-editar, .btn-excluir { padding: 5px 10px; text-decoration: none; color: white; border-radius: 4px; border: none; cursor: pointer; } .btn-editar { background-color: #007bff; } .btn-excluir { background-color: #dc3545; }</style>
 <?php include_once("templates/footer.php"); ?>

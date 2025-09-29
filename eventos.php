@@ -1,83 +1,85 @@
 <?php
 session_start();
 require_once 'conexao.php';
+include_once("helpers/url.php");
 
-// 1. Verifica se o usuário está logado. Se não, redireciona para o login.
-if (!isset($_SESSION["usuario_id"])) {
-    $_SESSION['erro'] = "Você precisa estar logado para ver seus ingressos.";
-    header("Location: login.php");
-    exit();
-}
+// --- LÓGICA DE FILTRAGEM E DADOS ---
+$filtro_origem = $_GET['origem'] ?? 'todos';
+$eventos_usuario_inscrito = [];
 
-$meus_eventos = [];
-$id_usuario = $_SESSION['usuario_id'];
-
-// 2. Busca no banco de dados todos os eventos associados ao ID do usuário logado.
 try {
-    // A consulta SQL une as tabelas 'inscricoes' e 'eventos' para pegar os detalhes dos eventos
-    // em que o usuário está inscrito.
+    // CORREÇÃO: A consulta agora SOMA a quantidade de ingressos em vez de contar as linhas de inscrição.
     $sql = "SELECT 
-                e.nome, 
-                e.data, 
-                e.local, 
-                e.origem,
-                i.data_inscricao
-            FROM inscricoes AS i
-            JOIN eventos AS e ON i.id_evento = e.id
-            WHERE i.id_usuario = ?
-            ORDER BY e.data ASC";
+                eventos.*, 
+                COALESCE(SUM(inscricoes.quantidade), 0) AS inscritos 
+            FROM eventos 
+            LEFT JOIN inscricoes ON eventos.id = inscricoes.id_evento";
+    
+    $params = [];
+    if ($filtro_origem !== 'todos') {
+        $sql .= " WHERE origem = ?";
+        $params[] = $filtro_origem;
+    }
 
+    $sql .= " GROUP BY eventos.id ORDER BY data ASC";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$id_usuario]);
-    $meus_eventos = $stmt->fetchAll();
+    $stmt->execute($params);
+    $eventos = $stmt->fetchAll();
 
+    if (isset($_SESSION['usuario_id'])) {
+        $stmt_inscrito = $conn->prepare("SELECT id_evento FROM inscricoes WHERE id_usuario = ?");
+        $stmt_inscrito->execute([$_SESSION['usuario_id']]);
+        $eventos_usuario_inscrito = $stmt_inscrito->fetchAll(PDO::FETCH_COLUMN);
+    }
 } catch (PDOException $e) {
-    // Em caso de erro, define $meus_eventos como um array vazio e exibe uma mensagem
-    $meus_eventos = [];
-    echo "Erro ao buscar seus ingressos: " . $e->getMessage();
+    $eventos = [];
+    echo "Erro ao buscar eventos: " . $e->getMessage();
 }
 
-// Inclui o cabeçalho da página
 include_once("templates/header.php");
+
+// Exibe mensagens de sucesso ou erro vindas de outras páginas
+if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
+    $mensagem = $_SESSION['mensagem'] ?? $_SESSION['erro'];
+    echo "<script>alert('" . addslashes($mensagem) . "');</script>";
+    unset($_SESSION['mensagem']);
+    unset($_SESSION['erro']);
+}
 ?>
-<link rel="stylesheet" href="css/style.css">
-<main class="form-container">
-    <div class="form-card" style="max-width: 900px;"> <h2>Meus Ingressos</h2>
+<main>
+<section class="filter-section">
+    <h1>Eventos Abertos</h1>
+    
+    <form method="GET" action="eventos.php" class="filter-form">
+        <label for="event-origin">Filtrar por Origem:</label>
+        <select id="event-origin" name="origem" onchange="this.form.submit()">
+            <option value="todos" <?= ($filtro_origem == 'todos') ? 'selected' : '' ?>>Todos</option>
+            <option value="sesi" <?= ($filtro_origem == 'sesi') ? 'selected' : '' ?>>SESI</option>
+            <option value="senai" <?= ($filtro_origem == 'senai') ? 'selected' : '' ?>>SENAI</option>
+        </select>
+    </form>
+    
+</section>
+    <section class="events-grid container">
+    <?php if (!empty($eventos)): ?>
+        <?php 
+        // Itera sobre os eventos para poder passar os dados corretos para o template do card
+        foreach ($eventos as $evento):
+            $vagas_restantes = $evento['max_pessoas'] - $evento['inscritos'];
+            $data_formatada = (new DateTime($evento['data']))->format('d/m/Y, H:i');
+            $usuario_logado = isset($_SESSION['usuario_id']);
+            $usuario_inscrito = in_array($evento['id'], $eventos_usuario_inscrito);
 
-        <?php if (count($meus_eventos) > 0): ?>
-            <p>Aqui estão todos os eventos para os quais você adquiriu ingresso.</p>
-            
-            <div class="table-container">
-                <table class="styled-table">
-                    <thead>
-                        <tr>
-                            <th>Evento</th>
-                            <th>Data do Evento</th>
-                            <th>Local</th>
-                            <th>Origem</th>
-                            <th>Data da Inscrição</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($meus_eventos as $evento): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($evento['nome']) ?></td>
-                                <td><?= (new DateTime($evento['data']))->format('d/m/Y, H:i') ?></td>
-                                <td><?= htmlspecialchars($evento['local']) ?></td>
-                                <td><?= htmlspecialchars($evento['origem']) ?></td>
-                                <td><?= (new DateTime($evento['data_inscricao']))->format('d/m/Y') ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-        <?php else: ?>
-            <p class="no-events-message" style="grid-column: 1; margin-top: 1rem;">Você ainda não adquiriu nenhum ingresso.</p>
-        <?php endif; ?>
-    </div>
+            // Inclui o template do card, que agora terá acesso às variáveis acima
+            include 'templates/event_card.php'; 
+        endforeach; 
+        ?>
+    <?php else: ?>
+        <p class="no-events-message">Sem eventos no momento.</p>
+    <?php endif; ?>
+</section>
 </main>
+
 <?php
-// Inclui o rodapé da página
 include_once("templates/footer.php");
 ?>

@@ -29,10 +29,10 @@ include_once("helpers/url.php");
           <img src="img/logo_senai.png" alt="Logo" class="logo-img">
       </a>
       <nav class="nav">
-          <a href="index.php">Eventos</a>
+          <a href="eventos.php">Eventos</a>
           
           <?php if (isset($_SESSION['usuario_id'])): ?>
-              <a href="eventos.php">Meus Ingressos</a>
+              <a href="meus_ingressos.php">Meus Ingressos</a>
 
               <?php if (isset($_SESSION['perm']) && in_array($_SESSION['perm'], ['Administrador', 'Organizador'])): ?>
                   <a href="cadastrar_evento.php">Cadastrar Evento</a>
