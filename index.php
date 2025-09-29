@@ -34,13 +34,11 @@ try {
 include_once("templates/header.php");
 ?>
 
-<style>
-    .hero {
-        background: url('img/essa.jpg') no-repeat center center/cover;
 
 <style>
     .hero {
         background: url('img/sesii.jpg') no-repeat center center/cover;
+
 
         color: white;
         text-align: center;
