@@ -230,7 +230,7 @@ h1, h2, h3 {
 .event-card-image {
     width: 100%;
     height: 150px; /* Altura fixa para as imagens */
-    object-fit: cover;
+    object-fit: contain;
     background-color: #ddd; /* Placeholder para quando não houver imagem */
 }
 
