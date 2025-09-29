@@ -2,6 +2,7 @@
 session_start();
 require_once 'conexao.php';
 
+
 if (!isset($_SESSION['perm']) || $_SESSION['perm'] != 'Administrador') {
     $_SESSION['erro'] = "Acesso negado."; header("Location: index.php"); exit();
 }
