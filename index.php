@@ -35,7 +35,7 @@ include_once("templates/header.php");
 ?>
 <style>
     .hero {
-        background: url('img/essa.jpg') no-repeat center center/cover;
+        background: url('img/sesii.jpg') no-repeat center center/cover;
         color: white;
         text-align: center;
         padding: 100px 20px;
