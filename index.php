@@ -33,16 +33,15 @@ try {
 
 include_once("templates/header.php");
 ?>
-<<<<<<< HEAD
+
 <style>
     .hero {
         background: url('img/essa.jpg') no-repeat center center/cover;
-=======
-<<<<<<< HEAD
+
 <style>
     .hero {
         background: url('img/sesii.jpg') no-repeat center center/cover;
->>>>>>> 66bdc9e77648fca83b2e5722f97f2ca558ab9682
+
         color: white;
         text-align: center;
         padding: 100px 20px;
@@ -52,12 +51,6 @@ include_once("templates/header.php");
         margin-bottom: 1rem;
     }
 </style>
-<<<<<<< HEAD
-=======
-=======
-
->>>>>>> 33e83d4be28257176f3ae9b90f3f154d410b855f
->>>>>>> 66bdc9e77648fca83b2e5722f97f2ca558ab9682
 <main>
     <section class="hero">
         <h1>Encontre os Melhores Eventos</h1>
