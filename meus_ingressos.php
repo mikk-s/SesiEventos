@@ -9,20 +9,31 @@ if (!isset($_SESSION["usuario_id"])) {
     exit();
 }
 
+// **INÍCIO DA LÓGICA DE EXIBIÇÃO DE MENSAGEM**
+// Exibe mensagens de sucesso ou erro vindas de outras páginas, como a de aquisição.
+if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
+    $mensagem = $_SESSION['mensagem'] ?? $_SESSION['erro'];
+    // Usa um script para mostrar um alerta no navegador.
+    echo "<script>alert('" . addslashes($mensagem) . "');</script>";
+    // Limpa as mensagens da sessão para não serem exibidas novamente.
+    unset($_SESSION['mensagem']);
+    unset($_SESSION['erro']);
+}
+// **FIM DA LÓGICA DE EXIBIÇÃO DE MENSAGEM**
+
 $meus_eventos = [];
 $id_usuario = $_SESSION['usuario_id'];
 
 // 2. Busca no banco de dados todos os eventos associados ao ID do usuário logado.
 try {
-    // A consulta SQL une as tabelas 'inscricoes' e 'eventos' para pegar os detalhes dos eventos
-    // em que o usuário está inscrito.
+    // **CORREÇÃO NA CONSULTA SQL**
+    // A consulta agora também seleciona i.quantidade para saber quantos ingressos foram comprados.
     $sql = "SELECT 
                 i.id as id_inscricao,
+                i.quantidade, 
                 e.nome, 
                 e.data, 
-                e.local, 
-                e.origem,
-                i.data_inscricao
+                e.local
             FROM inscricoes AS i
             JOIN eventos AS e ON i.id_evento = e.id
             WHERE i.id_usuario = ?
@@ -33,12 +44,10 @@ try {
     $meus_eventos = $stmt->fetchAll();
 
 } catch (PDOException $e) {
-    // Em caso de erro, define $meus_eventos como um array vazio e exibe uma mensagem
     $meus_eventos = [];
     echo "Erro ao buscar seus ingressos: " . $e->getMessage();
 }
 
-// Inclui o cabeçalho da página
 include_once("templates/header.php");
 ?>
 <link rel="stylesheet" href="css/style.css">
@@ -54,7 +63,7 @@ include_once("templates/header.php");
                         <tr>
                             <th>Evento</th>
                             <th>Data do Evento</th>
-                            <th>Local</th>
+                            <th>Quantidade</th>
                             <th>Ação</th>
                         </tr>
                     </thead>
@@ -63,7 +72,7 @@ include_once("templates/header.php");
                             <tr>
                                 <td><?= htmlspecialchars($evento['nome']) ?></td>
                                 <td><?= (new DateTime($evento['data']))->format('d/m/Y, H:i') ?></td>
-                                <td><?= htmlspecialchars($evento['local']) ?></td>
+                                <td><?= htmlspecialchars($evento['quantidade']) ?> ingresso(s)</td>
                                 <td>
                                     <form action="cancelar_inscricao.php" method="POST" onsubmit="return confirm('Tem certeza que deseja cancelar sua inscrição neste evento?');">
                                         <input type="hidden" name="id_inscricao" value="<?= $evento['id_inscricao'] ?>">
@@ -82,6 +91,5 @@ include_once("templates/header.php");
     </div>
 </main>
 <?php
-// Inclui o rodapé da página
 include_once("templates/footer.php");
 ?>
