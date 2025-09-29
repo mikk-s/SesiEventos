@@ -33,25 +33,18 @@ try {
 
 include_once("templates/header.php");
 ?>
-<style>
-    .hero {
-        background: url('img/essa.jpg') no-repeat center center/cover;
-        color: white;
-        text-align: center;
-        padding: 100px 20px;
-    }
-    .hero h1 {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-</style>
+
 <main>
     <section class="hero">
-        <h1>Encontre os Melhores Eventos</h1>
-        <p>Participe de palestras, workshops e muito mais!</p>
-        <a href="eventos.php" class="btn-primary">Ver Todos os Eventos</a>
+        <div class="hero-content">
+            <h1 class="hero-brand-title">ESCOLA</h1>
+            <h2 class="hero-main-title">SESI SENAI</h2>
+            
+            <p class="hero-subtitle">Encontre os Melhores Eventos</p>
+            <p>Participe de palestras, workshops e muito mais!</p>
+            <a href="eventos.php" class="btn-primary">Ver Todos os Eventos</a>
+        </div>
     </section>
-
     <div class="container" style="padding: 40px 15px;">
         <h2 style="text-align: center; margin-bottom: 30px;">Próximos Eventos</h2>
         <section class="events-grid">
@@ -76,6 +69,7 @@ include_once("templates/header.php");
         </section>
     </div>
 </main>
+
 <?php
 include_once("templates/footer.php");
 ?>
