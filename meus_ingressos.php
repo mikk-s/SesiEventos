@@ -19,7 +19,6 @@ $meus_eventos = [];
 $id_usuario = $_SESSION['usuario_id'];
 
 try {
-    // A consulta agora também pega o ID do evento para o link "Comprar Mais"
     $sql = "SELECT 
                 i.id as id_inscricao,
                 i.quantidade, 
@@ -56,7 +55,7 @@ include_once("templates/header.php");
                             <th>Evento</th>
                             <th>Data</th>
                             <th>Ingressos</th>
-                            <th style="width: 300px;">Ações</th>
+                            <th style="width: 380px;">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,9 +68,16 @@ include_once("templates/header.php");
                                     <div class="action-buttons-meus-ingressos">
                                         <form class="cancel-form" action="cancelar_inscricao.php" method="POST" onsubmit="return confirm('Tem certeza que deseja cancelar os ingressos selecionados?');">
                                             <input type="hidden" name="id_inscricao" value="<?= $evento['id_inscricao'] ?>">
-                                            <input type="number" name="quantidade" value="1" min="1" max="<?= $evento['quantidade'] ?>" class="cancel-input">
+                                            
+                                            <select name="quantidade" class="cancel-input">
+                                                <?php for ($i = 1; $i <= $evento['quantidade']; $i++): ?>
+                                                    <option value="<?= $i ?>"><?= $i ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+
                                             <button type="submit" class="btn-excluir">Cancelar</button>
                                         </form>
+
                                         <a href="adquirir_ingresso.php?id_evento=<?= $evento['id_evento'] ?>" class="btn-editar">Comprar Mais</a>
                                     </div>
                                 </td>
@@ -87,7 +93,9 @@ include_once("templates/header.php");
     </div>
 </main>
 <style>
-/* Estilos para alinhar os botões e campo de quantidade */
+/* ======================================= */
+/* >>> CSS CORRIGIDO E FINALIZADO <<<      */
+/* ======================================= */
 .action-buttons-meus-ingressos {
     display: flex;
     align-items: center;
@@ -95,13 +103,30 @@ include_once("templates/header.php");
 }
 .cancel-form {
     display: flex;
-    gap: 5px;
+    gap: 10px;
+    align-items: center;
 }
+
+/* Força o seletor a ter um tamanho fixo e ignora outras regras */
 .cancel-input {
-    width: 120px;
-    padding: 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    width: 80px !important; /* A diretiva !important força este estilo a ser aplicado */
+    padding: 0.5rem;
+    height: 42px;
+    font-size: 1rem;
+    text-align: center;
+    cursor: pointer;
+    background-color: #fff;
+    /* Redefine margens para garantir alinhamento */
+    margin-bottom: 0 !important;
+}
+
+/* Garante que os botões não sejam espremidos ou esticados */
+.action-buttons-meus-ingressos .btn-excluir,
+.action-buttons-meus-ingressos .btn-editar {
+    flex-shrink: 0;
+    white-space: nowrap;
+    width: auto;
+    margin-bottom: 0 !important;
 }
 </style>
 <?php
