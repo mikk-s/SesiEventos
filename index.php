@@ -3,9 +3,8 @@ session_start();
 require_once 'conexao.php';
 include_once("helpers/url.php");
 
-// Buscar alguns eventos para destaque
+// A sua lógica de busca de eventos continua a mesma, está perfeita.
 try {
-    // CORREÇÃO: A consulta foi ajustada para já trazer o número de inscritos.
     $sql = "SELECT 
                 eventos.*, 
                 COALESCE(SUM(inscricoes.quantidade), 0) AS inscritos 
@@ -19,7 +18,6 @@ try {
     $stmt = $conn->query($sql);
     $eventos_destaque = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Busca os eventos em que o usuário está inscrito para controle
     $eventos_usuario_inscrito = [];
     if (isset($_SESSION['usuario_id'])) {
         $stmt_inscrito = $conn->prepare("SELECT id_evento FROM inscricoes WHERE id_usuario = ?");
@@ -33,49 +31,45 @@ try {
 
 include_once("templates/header.php");
 ?>
-<style>
-    .hero {
-        background: url('img/essa.jpg') no-repeat center center/cover;
-        color: white;
-        text-align: center;
-        padding: 100px 20px;
-    }
-    .hero h1 {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-</style>
+
 <main>
-    <section class="hero">
-        <h1>Encontre os Melhores Eventos</h1>
-        <p>Participe de palestras, workshops e muito mais!</p>
-        <a href="eventos.php" class="btn-primary">Ver Todos os Eventos</a>
+    <section class="home-header">
+        <div class="container">
+            <div class="home-header-text">
+                <h1>Encontre os Melhores Eventos</h1>
+                <p>Participe de palestras, workshops e muito mais no SESI/SENAI!</p>
+            </div>
+
+            <div class="swiper-container">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <?php if (!empty($eventos_destaque)): ?>
+                            <?php 
+                            foreach ($eventos_destaque as $evento):
+                                $vagas_restantes = $evento['max_pessoas'] - $evento['inscritos'];
+                                $data_formatada = (new DateTime($evento['data']))->format('d/m/Y, H:i');
+                                $usuario_logado = isset($_SESSION['usuario_id']);
+                                $usuario_inscrito = in_array($evento['id'], $eventos_usuario_inscrito);
+                            ?>
+                                <div class="swiper-slide">
+                                    <?php include 'templates/event_card.php'; ?>
+                                </div>
+                            <?php 
+                            endforeach; 
+                            ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+
+        </div>
     </section>
 
-    <div class="container" style="padding: 40px 15px;">
-        <h2 style="text-align: center; margin-bottom: 30px;">Próximos Eventos</h2>
-        <section class="events-grid">
-            <?php if (!empty($eventos_destaque)): ?>
-                <?php 
-                // **INÍCIO DA CORREÇÃO**
-                // Este laço agora prepara as variáveis antes de incluir o template
-                foreach ($eventos_destaque as $evento):
-                    $vagas_restantes = $evento['max_pessoas'] - $evento['inscritos'];
-                    $data_formatada = (new DateTime($evento['data']))->format('d/m/Y, H:i');
-                    $usuario_logado = isset($_SESSION['usuario_id']);
-                    $usuario_inscrito = in_array($evento['id'], $eventos_usuario_inscrito);
+    </main>
 
-                    // Inclui o template, que agora terá acesso às variáveis necessárias
-                    include 'templates/event_card.php'; 
-                endforeach; 
-                // **FIM DA CORREÇÃO**
-                ?>
-            <?php else: ?>
-                <p>Nenhum evento futuro encontrado.</p>
-            <?php endif; ?>
-        </section>
-    </div>
-</main>
 <?php
 include_once("templates/footer.php");
 ?>
