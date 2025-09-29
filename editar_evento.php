@@ -7,20 +7,19 @@ if (!isset($_SESSION['perm']) || !in_array($_SESSION['perm'], ['Administrador', 
     $_SESSION['erro'] = "Acesso negado."; header("Location: index.php"); exit();
 }
 
-$id_evento = $_GET['id'] ?? null;
+$$id_evento = $_GET['id'] ?? null;
 if (!$id_evento) { header("Location: gerenciar_eventos.php"); exit(); }
 
-// Processa o formulário de atualização
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome']; 
     $data = $_POST['data']; 
     $local = $_POST['local'];
     $max_pessoas = $_POST['max_pessoas']; 
+    // NOVO CAMPO
+    $limite_por_usuario = $_POST['limite_por_usuario'];
     $origem = $_POST['origem']; 
     $descricao = $_POST['descricao_completa'];
     $imagem_antiga = $_POST['imagem_antiga'];
-    
-    $imagem_path = $imagem_antiga; // Mantém a imagem antiga por padrão
 
     // Lógica de Upload de Nova Imagem
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
@@ -36,10 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+   
     try {
-        $sql = "UPDATE eventos SET nome = ?, data = ?, local = ?, max_pessoas = ?, origem = ?, descricao_completa = ?, imagem = ? WHERE id = ?";
+        // ATUALIZAÇÃO DA QUERY SQL
+        $sql = "UPDATE eventos SET nome = ?, data = ?, local = ?, max_pessoas = ?, limite_por_usuario = ?, origem = ?, descricao_completa = ?, imagem = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$nome, $data, $local, $max_pessoas, $origem, $descricao, $imagem_path, $id_evento]);
+        // BIND DO NOVO PARÂMETRO
+        $stmt->execute([$nome, $data, $local, $max_pessoas, $limite_por_usuario, $origem, $descricao, $imagem_path, $id_evento]);
         $_SESSION['mensagem'] = "Evento atualizado com sucesso!";
     } catch (PDOException $e) {
         $_SESSION['erro'] = "Erro ao atualizar evento: " . $e->getMessage();
@@ -47,16 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: gerenciar_eventos.php");
     exit();
 }
-
 // Busca dados do evento e locais para preencher o form
 $evento_stmt = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
 $evento_stmt->execute([$id_evento]);
 $evento = $evento_stmt->fetch();
 $locais = $conn->query("SELECT sala, bloco FROM locais ORDER BY bloco, sala")->fetchAll();
 
+
 include_once("templates/header.php");
-?>
-<link rel="stylesheet" href="css/style.css">
+?><link rel="stylesheet" href="css/style.css">
 <main class="form-container">
     <div class="form-card" style="max-width: 900px; display: flex; flex-wrap: wrap; gap: 2rem;">
         <div style="flex: 1; min-width: 300px;">
@@ -82,9 +83,17 @@ include_once("templates/header.php");
                     <?php endforeach; ?>
                 </select>
 
-                <label for="max_pessoas">Lotação Máxima:</label>
-                <input type="number" id="max_pessoas" name="max_pessoas" value="<?= htmlspecialchars($evento['max_pessoas']) ?>" required>
-                
+                <div style="display: flex; gap: 1rem;">
+                    <div style="flex: 1;">
+                        <label for="max_pessoas">Lotação Máxima:</label>
+                        <input type="number" id="max_pessoas" name="max_pessoas" value="<?= htmlspecialchars($evento['max_pessoas']) ?>" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="limite_por_usuario">Limite por Usuário:</label>
+                        <input type="number" id="limite_por_usuario" name="limite_por_usuario" value="<?= htmlspecialchars($evento['limite_por_usuario']) ?>" required>
+                    </div>
+                </div>
+
                 <label for="origem">Origem:</label>
                 <select id="origem" name="origem" required onchange="updatePreview()">
                     <option value="SESI" <?= ($evento['origem'] == 'SESI') ? 'selected' : '' ?>>SESI</option>
@@ -131,7 +140,6 @@ function updatePreview() {
         document.getElementById('preview-data').innerText = 'DD/MM/AAAA, HH:MM';
     }
 }
-
 function updatePreviewImage(input) {
     const previewImage = document.getElementById('preview-image');
     if (input.files && input.files[0]) {
@@ -142,7 +150,6 @@ function updatePreviewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-
 // Chamar a função uma vez no início para popular o preview com os dados existentes
 document.addEventListener('DOMContentLoaded', updatePreview);
 </script>

@@ -14,7 +14,7 @@ if (isset($_SESSION['perm']) && $_SESSION['perm'] == "Visitante") {
     exit();
 }
 
-// 2. BUSCA OS LOCAIS DISPONÍVEIS NO BANCO
+// BUSCA OS LOCAIS DISPONÍVEIS NO BANCO
 try {
     $locais_stmt = $conn->query("SELECT * FROM locais ORDER BY bloco, sala");
     $locais = $locais_stmt->fetchAll();
@@ -23,13 +23,14 @@ try {
     $_SESSION['mensagem'] = "Erro ao carregar os locais: " . $e->getMessage();
 }
 
-
-// 3. Processa o formulário quando ele é enviado
+// Processa o formulário quando ele é enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome = $_POST['nome'] ?? null;
     $data = $_POST['data'] ?? null;
     $local = $_POST['local'] ?? null;
     $max_pessoas = $_POST['max_pessoas'] ?? null;
+    // NOVO CAMPO
+    $limite_por_usuario = $_POST['limite_por_usuario'] ?? null;
     $origem = $_POST['origem'] ?? null;
     $descricao_completa = $_POST['descricao_completa'] ?? null;
     $organizador = $_SESSION['usuario'];
@@ -48,17 +49,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    if (empty($nome) || empty($data) || empty($local) || empty($max_pessoas) || empty($origem)) {
+    if (empty($nome) || empty($data) || empty($local) || empty($max_pessoas) || empty($limite_por_usuario) || empty($origem)) {
         $_SESSION['mensagem'] = "Erro: Por favor, preencha todos os campos obrigatórios.";
     } else {
         try {
-            $sql = "INSERT INTO eventos (nome, data, local, max_pessoas, origem, descricao_completa, organizador, imagem) 
-                    VALUES (:nome, :data, :local, :max_pessoas, :origem, :descricao_completa, :organizador, :imagem)";
+            // ATUALIZAÇÃO DA QUERY SQL
+            $sql = "INSERT INTO eventos (nome, data, local, max_pessoas, limite_por_usuario, origem, descricao_completa, organizador, imagem) 
+                    VALUES (:nome, :data, :local, :max_pessoas, :limite_por_usuario, :origem, :descricao_completa, :organizador, :imagem)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(":nome", $nome);
             $stmt->bindParam(":data", $data);
             $stmt->bindParam(":local", $local);
             $stmt->bindParam(":max_pessoas", $max_pessoas, PDO::PARAM_INT);
+            // BIND DO NOVO PARÂMETRO
+            $stmt->bindParam(":limite_por_usuario", $limite_por_usuario, PDO::PARAM_INT);
             $stmt->bindParam(":origem", $origem);
             $stmt->bindParam(":descricao_completa", $descricao_completa);
             $stmt->bindParam(":organizador", $organizador);
@@ -113,8 +117,16 @@ include_once("templates/header.php");
                     <?php endif; ?>
                 </select>
 
-                <label for="max_pessoas">Lotação Máxima:</label>
-                <input type="number" id="max_pessoas" name="max_pessoas" min="1" required>
+                <div style="display: flex; gap: 1rem;">
+                    <div style="flex: 1;">
+                        <label for="max_pessoas">Lotação Máxima:</label>
+                        <input type="number" id="max_pessoas" name="max_pessoas" min="1" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="limite_por_usuario">Limite por Usuário:</label>
+                        <input type="number" id="limite_por_usuario" name="limite_por_usuario" min="1" value="10" required>
+                    </div>
+                </div>
 
                 <label for="origem">Origem:</label>
                 <select id="origem" name="origem" required onchange="updatePreview()">
