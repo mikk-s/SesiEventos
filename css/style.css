@@ -52,7 +52,11 @@ main {
 /* ================================================= */
 
 /* Botões */
-.btn, .submit-button, .btn-primary {
+/* ================================================================ */
+/* >>> CÓDIGO ATUALIZADO AQUI <<<                                  */
+/* Base unificada para todos os botões com transição universal     */
+/* ================================================================ */
+.btn, .submit-button, .btn-primary, .btn-editar, .btn-excluir, .action-buttons, form button .btn-excluir{
     display: inline-block;
     padding: 0.75rem 2rem;
     border-radius: 8px;
@@ -60,20 +64,31 @@ main {
     font-weight: 600;
     text-align: center;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     border: none;
-    font-family: 'Poppins', sans-serif; /* Fonte para o botão */
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease; 
 }
 
+/* Estilos de cor para botões primários e de submit */
 .btn-primary, .submit-button {
     background-color: var(--primary-color);
     color: var(--text-color-light);
 }
 
-.btn-primary:hover, .submit-button:hover {
-    background-color: #004494;
-    transform: translateY(-2px);
-    box-shadow: var(--box-shadow-subtle);
+/* ================================================================ */
+/* >>> NOVA ANIMAÇÃO HOVER UNIVERSAL <<<                           */
+/* Aplica o efeito de hover a TODAS as classes de botão            */
+/* ================================================================ */
+.btn:hover, 
+.submit-button:hover, 
+.btn-primary:hover, 
+.btn-editar:hover, 
+.btn-excluir:hover
+.action-buttons:hover,
+form button .btn-excluir:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--box-shadow-hover);
+    filter: brightness(1.1);
 }
 
 .submit-button {
@@ -452,22 +467,19 @@ h1, h2, h3 {
 }
 
 .action-buttons {
-    display: flex;
-    gap: 10px;
+    display: flex; /* Mantém os itens lado a lado */
+    gap: 10px;     /* Mantém o espaço entre eles */
 }
 
+/* O form agora é apenas um "envelope" invisível para o botão */
+.action-buttons form {
+    display: contents; /* Faz o form "desaparecer" para o layout, expondo o botão */
+}
+
+/* AGORA, o estilo é aplicado igualmente para o <a> e para o <button> */
 .action-buttons .btn-editar,
 .action-buttons .btn-excluir {
-    flex: 1;
+    flex: 1; /* Faz ambos os botões ocuparem o mesmo espaço */
     text-align: center;
     padding: 8px 12px;
-}
-
-.action-buttons form {
-    flex: 1;
-    display: flex;
-}
-
-.action-buttons form button {
-    width: 100%;
 }
