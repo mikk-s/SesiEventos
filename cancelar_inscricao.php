@@ -8,6 +8,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_inscricao'])) {
     $id_inscricao = $_POST['id_inscricao'];
     $id_usuario = $_SESSION['usuario_id'];
