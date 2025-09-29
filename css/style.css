@@ -76,6 +76,10 @@ main {
     box-shadow: var(--box-shadow-subtle);
 }
 
+.submit-button {
+    margin-top: 20px;
+}
+
 /* Botões de ação na tabela */
 .btn-editar, .btn-excluir {
     padding: 0.5rem 1rem;
