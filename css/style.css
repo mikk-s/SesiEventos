@@ -484,3 +484,50 @@ h1, h2, h3 {
     text-align: center;
     padding: 8px 12px;
 }
+
+.dashboard-grid a {
+    text-decoration: none; /* Remove o sublinhado */
+    color: inherit;        /* Faz o texto herdar a cor original (preto) */
+}
+
+/* Define um layout para o grid de estatísticas */
+.dashboard-grid {
+    width: 100%; 
+    grid-template-columns: repeat(4, 1fr); /* Reforçando a regra das 4 colunas */
+}
+
+/* Força cada card a ocupar 100% do espaço da coluna do grid em que ele está */
+.dashboard-grid .stat-card {
+    width: 100%; 
+
+}
+/* Estilo base para cada card de estatística */
+.stat-card {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow-subtle);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Adiciona transição suave */
+}
+
+/* Efeito ao passar o mouse: o card "salta" um pouco */
+.stat-card:hover {
+    transform: scale(1.05); /* Aumenta o tamanho do card em 5% */
+    box-shadow: var(--box-shadow-hover); /* Deixa a sombra mais pronunciada */
+}
+
+/* Estilo para o título dentro do card */
+.stat-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-color-secondary);
+}
+
+/* Estilo para o número grande de estatística */
+.stat-card .stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.2;
+}
