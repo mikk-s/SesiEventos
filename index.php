@@ -40,7 +40,7 @@ include_once("templates/header.php");
         background: url('img/banner.jpg') no-repeat center center/cover;
 
 
-        color: white;
+        color: black;
         text-align: center;
         padding: 100px 20px;
     }
