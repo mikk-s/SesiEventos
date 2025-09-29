@@ -51,6 +51,7 @@ include_once("templates/header.php");
 </style>
 <main>
     <section class="hero">
+    
         <h1>Encontre os Melhores Eventos</h1>
         <p>Participe de palestras, workshops e muito mais!</p>
         <a href="eventos.php" class="btn-primary">Ver Todos os Eventos</a>
