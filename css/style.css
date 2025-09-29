@@ -1,5 +1,5 @@
 /* ================================================= */
-/* 1. CONFIGURAÇÃO GERAL E VARIÁVEIS     */
+/* 1. CONFIGURAÇÃO GERAL E VARIÁVEIS       */
 /* ================================================= */
 
 /* Paleta de Cores */
@@ -132,7 +132,7 @@ h1, h2, h3 {
 }
 
 /* ================================================= */
-/* 3. LAYOUT E SEÇÕES                       */
+/* 3. LAYOUT E SEÇÕES                  */
 /* ================================================= */
 
 /* Cabeçalho */
@@ -151,10 +151,10 @@ h1, h2, h3 {
 .logo-img {
     max-width: 160px;
     height: auto;
-    
+   
 }
 .logo{
-    text-decoration: none;
+     text-decoration: none;
 }
 
 .nav a {
@@ -276,73 +276,12 @@ h1, h2, h3 {
     background-color: #efefef;
 }
 
-/* ======================================================= */
-/* INÍCIO DO NOVO CÓDIGO ADICIONADO                       */
-/* ======================================================= */
-
-/* ================================================= */
-/* 4. SEÇÃO HERO (PÁGINA INICIAL)                  */
-/* ================================================= */
-
-.hero {
-    /* IMPORTANTE: Use uma imagem de fundo SEM o texto. */
-    background: url('img/essa.jpg') no-repeat center center/cover;
-    color: white;
-    
-    /* Usando Flexbox para centralizar o conteúdo verticalmente */
-    min-height: 60vh; /* Altura da seção */
-    display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center;     /* Centraliza verticalmente */
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.hero-content {
-    /* Um container para o conteúdo, se necessário */
-    max-width: 800px;
-}
-
-/* Estilo para o "ESCOLA" */
-.hero-brand-title {
-    font-size: 2.5rem; /* Tamanho menor que o de baixo */
-    font-weight: 500;
-    margin: 0;
-    line-height: 1; /* Remove espaçamento extra */
-}
-
-/* Estilo para o "SESI SENAI" */
-.hero-main-title {
-    font-size: 6rem; /* Texto bem grande! */
-    font-weight: 700;
-    margin: 0 0 1rem 0; /* Espaço abaixo dele */
-    line-height: 1;
-    text-transform: uppercase; /* Deixa as letras maiúsculas */
-}
-
-/* Estilo para o subtítulo "Encontre os melhores eventos" */
-.hero-subtitle {
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.hero p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-}
-
-/* ======================================================= */
-/* FIM DO NOVO CÓDIGO ADICIONADO                          */
-/* ======================================================= */
-
-
 /* ================================================= */
 /* Animações e Estilo Centralizado         */
 /* ================================================= */
 
 /* 1. Container que centraliza o formulário na tela
-   Ele usa Flexbox para alinhar o conteúdo perfeitamente
+    Ele usa Flexbox para alinhar o conteúdo perfeitamente
 */
 .form-container, .login-form-page {
     display: flex;
@@ -428,18 +367,10 @@ h1, h2, h3 {
 }
 
 /* ================================================= */
-/* 5. RESPONSIVIDADE                       */
+/* 3. RESPONSIVIDADE                  */
 /* ================================================= */
-/* Mudei o número de 3 para 5 para manter a ordem */
 
 @media (max-width: 768px) {
-    .hero-main-title {
-        font-size: 4rem; /* Diminui a fonte em telas pequenas */
-    }
-    .hero-subtitle {
-        font-size: 1.5rem;
-    }
-
     .login-split-container {
         flex-direction: column;
         height: auto;
