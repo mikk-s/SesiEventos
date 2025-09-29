@@ -56,7 +56,7 @@ main {
 /* >>> CÓDIGO ATUALIZADO AQUI <<<                                  */
 /* Base unificada para todos os botões com transição universal     */
 /* ================================================================ */
-.btn, .submit-button, .btn-primary, .btn-editar, .btn-excluir, .action-buttons, form button .btn-excluir{
+.btn, .submit-button, .btn-primary, .btn-editar, .btn-excluir, .action-buttons, form button .btn-excluir, .stat-card{
     display: inline-block;
     padding: 0.75rem 2rem;
     border-radius: 8px;
@@ -85,7 +85,8 @@ main {
 .btn-editar:hover, 
 .btn-excluir:hover
 .action-buttons:hover,
-form button .btn-excluir:hover {
+form button .btn-excluir:hover,
+.stat-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--box-shadow-hover);
     filter: brightness(1.1);
