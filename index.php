@@ -37,7 +37,7 @@ include_once("templates/header.php");
 
 <style>
     .hero {
-        background: url('img/sesii.jpg') no-repeat center center/cover;
+        background: url('img/banner.jpg') no-repeat center center/cover;
 
 
         color: white;
