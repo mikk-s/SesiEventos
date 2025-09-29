@@ -36,27 +36,40 @@ include_once("templates/header.php");
         <h2>Painel do Administrador</h2>
         
         <?php if (isset($erro_stats)): ?>
-            <p class="message error"><?= htmlspecialchars($erro_stats); ?></p>
-        <?php else: ?>
-        <div class="dashboard-grid">
-            <div class="stat-card">
-                <h3>Total de Eventos</h3>
-                <p class="stat-number"><?= $total_eventos ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>Total de Usuários</h3>
-                <p class="stat-number"><?= $total_usuarios ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>Salas Cadastradas</h3>
-                <p class="stat-number"><?= $total_salas ?></p>
-            </div>
-             <div class="stat-card">
-                <h3>Ingressos Adquiridos</h3>
-                <p class="stat-number"><?= $total_inscricoes ?></p>
-            </div>
+    <p class="message error"><?= htmlspecialchars($erro_stats); ?></p>
+<?php else: ?>
+<div class="dashboard-grid">
+    
+    <a href="gerenciar_eventos.php">
+        <div class="stat-card">
+            <h3>Total de Eventos</h3>
+            <p class="stat-number"><?= $total_eventos ?></p>
         </div>
-        <?php endif; ?>
+    </a>
+
+    <a href="gerenciar_usuarios.php">
+        <div class="stat-card">
+            <h3>Total de Usuários</h3>
+            <p class="stat-number"><?= $total_usuarios ?></p>
+        </div>
+    </a>
+
+    <a href="gerenciar_salas.php">
+        <div class="stat-card">
+            <h3>Salas Cadastradas</h3>
+            <p class="stat-number"><?= $total_salas ?></p>
+        </div>
+    </a>
+    
+    <a href="meus_ingressos.php">
+        <div class="stat-card">
+            <h3>Ingressos Adquiridos</h3>
+            <p class="stat-number"><?= $total_inscricoes ?></p>
+        </div>
+    </a>
+
+</div>
+<?php endif; ?>
 
          <hr style="margin: 2rem 0;">
         <h3>Ferramentas de Gerenciamento</h3>
