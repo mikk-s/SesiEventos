@@ -7,7 +7,7 @@ if (!isset($_SESSION['perm']) || !in_array($_SESSION['perm'], ['Administrador', 
     $_SESSION['erro'] = "Acesso negado."; header("Location: index.php"); exit();
 }
 
-$$id_evento = $_GET['id'] ?? null;
+$id_evento = $_GET['id'] ?? null;
 if (!$id_evento) { header("Location: gerenciar_eventos.php"); exit(); }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
