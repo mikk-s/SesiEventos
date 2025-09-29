@@ -98,7 +98,7 @@ include_once("templates/header.php");
     gap: 5px;
 }
 .cancel-input {
-    width: 60px;
+    width: 100px;
     padding: 8px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
