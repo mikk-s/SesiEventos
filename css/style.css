@@ -531,3 +531,409 @@ h1, h2, h3 {
     font-family: 'Poppins', sans-serif;
     line-height: 1.2;
 }
+
+/* ================================================= */
+/* 6. ESTILOS DA NOVA PÁGINA INICIAL (PESQUISA E CARROSSEL) */
+/* ================================================= */
+
+/* Seção principal de pesquisa e filtros */
+.search-and-filter-section {
+    background-color: #eef5ff; /* Um azul bem claro para o fundo */
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.search-and-filter-section h1 {
+    font-size: 2.5rem;
+    color: #002b5c; /* Azul escuro do SESI/SENAI */
+}
+
+.search-and-filter-section p {
+    font-size: 1.1rem;
+    color: #5b7086;
+    margin-bottom: 2rem;
+}
+
+/* Barra de pesquisa */
+.search-bar {
+    display: flex;
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow-subtle);
+}
+
+.search-bar input[type="search"] {
+    flex-grow: 1;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+}
+.search-bar input[type="search"]:focus {
+    outline: none;
+}
+
+.search-bar button {
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.search-bar button:hover {
+    background-color: #003d82;
+}
+
+/* Container dos filtros */
+.filters-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #5b7086;
+}
+
+.filter-group select, .filter-group input[type="date"] {
+    padding: 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 0.9rem;
+}
+
+/* Estilo aprimorado do filtro de data */
+.date-filter-group {
+    background-color: #fff;
+    padding: 0.3rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.date-filter-group input[type="date"] {
+    border: none; /* Remove a borda individual dos inputs */
+    padding: 0.3rem;
+}
+
+.date-filter-group input[type="date"]:focus {
+    outline: none;
+}
+
+.date-filter-group span {
+    color: var(--text-color-secondary);
+}
+
+/* Estilos do Carrossel */
+.carousel-slide-content {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow-subtle);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.carousel-slide-content:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.carousel-slide-content img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.carousel-slide-content h4 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    padding: 1rem;
+    margin: 0;
+    text-align: center;
+    flex-grow: 1; /* Faz o título ocupar o espaço restante */
+}
+
+.carousel-link {
+    text-decoration: none;
+    color: var(--text-color-dark);
+}
+
+/* Slide final (banner) */
+.carousel-banner-slide {
+    background: linear-gradient(45deg, #0056b3, #003d82);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+.carousel-banner-slide h3 {
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* ================================================= */
+/* 7. ESTILOS DO NOVO CARROSSEL PRINCIPAL (SYMPLA) */
+/* ================================================= */
+
+/* Container do Carrossel Principal */
+#main-carousel {
+    max-width: 1200px;
+    margin: 2rem auto 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.main-carousel-image {
+    width: 100%;
+    height: 450px; /* Altura do banner principal */
+    background-size: cover;
+    background-position: center;
+}
+
+/* Slide Final (Banner de Call-to-action) */
+.final-slide-banner {
+    background: linear-gradient(45deg, #0056b3, #003d82);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.final-slide-banner h2 {
+    color: white;
+    font-size: 3rem;
+}
+
+/* Setas de Navegação (estilo Sympla) */
+#main-carousel .splide__arrow {
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    opacity: 0.8;
+}
+#main-carousel .splide__arrow:hover {
+    opacity: 1;
+}
+#main-carousel .splide__arrow svg {
+    fill: #333;
+}
+#main-carousel .splide__arrow--prev {
+    left: 1rem;
+}
+#main-carousel .splide__arrow--next {
+    right: 1rem;
+}
+
+/* Paginação (bolinhas) */
+#main-carousel .splide__pagination__page {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0,0,0,0.2);
+    width: 12px;
+    height: 12px;
+    margin: 0 6px;
+}
+#main-carousel .splide__pagination__page.is-active {
+    background: #fff;
+    transform: scale(1.2);
+}
+
+/* Seção de Informações do Evento (abaixo do carrossel) */
+#carousel-event-info {
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+#carousel-event-info a {
+    text-decoration: none;
+    color: var(--text-color-dark);
+}
+
+#carousel-event-info h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+#carousel-event-info p {
+    color: var(--text-color-secondary);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+/* ============================================== */
+/* 8. CORREÇÃO PARA IMAGEM DO CARROSSEL PRINCIPAL */
+/* ============================================== */
+
+.main-carousel-image-container {
+    width: 100%;
+    height: 450px; /* Mesma altura que definimos para o banner */
+    border-radius: 16px; /* Para garantir que a imagem tenha bordas arredondadas */
+    overflow: hidden;
+}
+
+.main-carousel-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Faz a imagem cobrir todo o espaço, sem distorcer */
+    object-position: center; /* Centraliza a imagem */
+}
+
+/* Ajuste no slide final para centralizar o texto */
+.final-slide-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, #0056b3, #003d82);
+}
+
+.final-slide-banner p {
+    font-size: 1.2rem;
+    color: #eef5ff;
+}
+/* ================================================= */
+/* 9. ESTILOS DO NOVO MODAL DE EVENTOS             */
+/* ================================================= */
+
+/* Fundo (Overlay) */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Centraliza o conteúdo do modal na tela */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Conteúdo Principal do Modal */
+.modal-content {
+    display: flex; /* Layout de duas colunas */
+    flex-direction: row; /* Colunas lado a lado */
+    background-color: #fff;
+    width: 90%;
+    max-width: 800px; /* Largura máxima */
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden; /* Garante que a imagem não vaze das bordas arredondadas */
+    animation: fade-in-up 0.4s ease-out;
+}
+
+/* Container da Imagem (Coluna Esquerda) */
+.modal-image-container {
+    flex: 1; /* Ocupa metade do espaço */
+    min-width: 300px;
+}
+#modal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem cubra o espaço sem distorcer */
+}
+
+/* Container dos Detalhes (Coluna Direita) */
+.modal-details {
+    flex: 1.2; /* Ocupa um pouco mais de espaço que a imagem */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.modal-details p {
+    margin: 0.5rem 0;
+    color: var(--text-color-secondary);
+    font-size: 1rem;
+}
+.modal-details p strong {
+    color: var(--text-color-dark);
+}
+
+#modal-description {
+    margin-top: 1rem;
+    max-height: 150px;
+    overflow-y: auto; /* Adiciona scroll se a descrição for longa */
+}
+
+/* Botão de Ação */
+#modal-action {
+    margin-top: auto; /* Empurra o botão para o final do modal */
+    padding-top: 1rem;
+}
+#modal-action .submit-button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Botão de Fechar ("X") */
+.close-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    z-index: 10;
+}
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+
+/* Responsividade para o Modal */
+@media (max-width: 768px) {
+    .modal-content {
+        flex-direction: column; /* Empilha as colunas em telas menores */
+        max-height: 90vh;
+        max-width: 90vw;
+    }
+    .modal-image-container {
+        height: 200px;
+        min-width: unset;
+    }
+    .modal-details {
+        padding: 1.5rem;
+    }
+    #modal-title {
+        font-size: 1.5rem;
+    }
+}
