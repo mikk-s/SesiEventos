@@ -123,7 +123,7 @@ include_once("templates/header.php");
         </section>
     </div>
 </main>
- <script src="script.js" ></script>
+
 <?php
 include_once("templates/footer.php");
 ?>

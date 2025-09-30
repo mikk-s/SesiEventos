@@ -19,6 +19,7 @@
             </div>
         </div>
     </div>
+     <script src="script.js" ></script>
 <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {

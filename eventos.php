@@ -114,7 +114,7 @@ if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
         </section>
     </div>
 </main>
- <script src="script.js" ></script>
+
 <?php
 include_once("templates/footer.php");
 ?>
