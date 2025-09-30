@@ -2,7 +2,6 @@
 session_start();
 require_once 'conexao.php';
 
-// PERMISSÃO: Apenas Administrador ou Organizador
 if (!isset($_SESSION['perm']) || !in_array($_SESSION['perm'], ['Administrador', 'Organizador'])) {
     $_SESSION['erro'] = "Acesso negado."; header("Location: index.php"); exit();
 }
@@ -10,16 +9,38 @@ if (!isset($_SESSION['perm']) || !in_array($_SESSION['perm'], ['Administrador', 
 $id_evento = $_GET['id'] ?? null;
 if (!$id_evento) { header("Location: gerenciar_eventos.php"); exit(); }
 
+// Busca os dados do evento para verificação
+$evento_stmt = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
+$evento_stmt->execute([$id_evento]);
+$evento = $evento_stmt->fetch();
+
+// **VERIFICAÇÃO DE PROPRIEDADE**
+// Se o usuário não for Admin e o nome do organizador no evento for diferente do usuário logado, nega o acesso.
+if ($_SESSION['perm'] != 'Administrador'  && $evento['organizador'] != $_SESSION['usuario']) {
+    $_SESSION['erro'] = "Acesso negado. Você só pode editar seus próprios eventos.";
+    header("Location: gerenciar_eventos.php");
+    exit();
+}
+// Se o evento não foi encontrado de forma alguma
+if (!$evento) {
+    $_SESSION['erro'] = "Evento não encontrado.";
+    header("Location: gerenciar_eventos.php");
+    exit();
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // A verificação de propriedade já foi feita acima, então o POST é seguro.
     $nome = $_POST['nome']; 
     $data = $_POST['data']; 
+    // ... (resto da lógica de atualização, sem alterações)...
     $local = $_POST['local'];
     $max_pessoas = isset($_POST['sem_limite']) ? 0 : ($_POST['max_pessoas'] ?? null);
     $limite_por_usuario = $_POST['limite_por_usuario'];
     $origem = $_POST['origem']; 
     $descricao = $_POST['descricao_completa'];
     $imagem_antiga = $_POST['imagem_antiga'];
-    $imagem_path = $imagem_antiga; // Mantém a imagem antiga por padrão
+    $imagem_path = $imagem_antiga;
 
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
         $target_dir = "img/eventos/";
@@ -27,9 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $target_file = $target_dir . $image_name;
         if (move_uploaded_file($_FILES["imagem"]["tmp_name"], $target_file)) {
             $imagem_path = $target_file;
-            if ($imagem_antiga && file_exists($imagem_antiga)) {
-                unlink($imagem_antiga);
-            }
+            if ($imagem_antiga && file_exists($imagem_antiga)) { unlink($imagem_antiga); }
         }
     }
    
@@ -45,12 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-$evento_stmt = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
-$evento_stmt->execute([$id_evento]);
-$evento = $evento_stmt->fetch();
 $locais = $conn->query("SELECT sala, bloco FROM locais ORDER BY bloco, sala")->fetchAll();
-
 include_once("templates/header.php");
+
 ?>
 <link rel="stylesheet" href="css/style.css">
 <main class="form-container">

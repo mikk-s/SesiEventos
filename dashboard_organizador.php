@@ -2,99 +2,92 @@
 session_start();
 require_once 'conexao.php';
 
-// VERIFICAÇÃO DE PERMISSÃO DE Organizador
-if (!isset($_SESSION['perm']) || $_SESSION['perm'] != 'Organizador') {
-    $_SESSION['erro'] = "Acesso negado. Esta página é apenas para Organizadores.";
+// VERIFICAÇÃO DE PERMISSÃO: Apenas Organizador ou Administrador (Admin pode ver para depuração)
+if (!isset($_SESSION['perm']) || !in_array($_SESSION['perm'], ['Organizador', 'Administrador'])) {
+    $_SESSION['erro'] = "Acesso negado.";
     header("Location: index.php");
     exit();
 }
 
+// O nome do organizador é o nome do usuário logado
 $organizador_nome = $_SESSION['usuario'];
-$data_inicio = $_GET['data_inicio'] ?? '';
-$data_fim = $_GET['data_fim'] ?? '';
 
 try {
-    // Base da Query
-    $params = [$organizador_nome];
-    $sql_total_eventos = "SELECT COUNT(*) FROM eventos WHERE organizador = ?";
-    $sql_total_ingressos = "SELECT SUM(i.quantidade) FROM inscricoes i JOIN eventos e ON i.id_evento = e.id WHERE e.organizador = ?";
-    $sql_eventos_finalizados = "SELECT COUNT(*) FROM eventos WHERE organizador = ? AND data < NOW()";
-
-    // Adiciona filtro de data se fornecido
-    if ($data_inicio && $data_fim) {
-        $sql_total_eventos .= " AND data BETWEEN ? AND ?";
-        $sql_total_ingressos .= " AND e.data BETWEEN ? AND ?";
-        $sql_eventos_finalizados .= " AND data BETWEEN ? AND ?";
-        array_push($params, $data_inicio, $data_fim);
-    }
-
-    $stmt_total_eventos = $conn->prepare($sql_total_eventos);
-    $stmt_total_eventos->execute($params);
+    // 1. Total de eventos criados pelo organizador
+    $stmt_total_eventos = $conn->prepare("SELECT COUNT(*) FROM eventos WHERE organizador = ?");
+    $stmt_total_eventos->execute([$organizador_nome]);
     $total_eventos = $stmt_total_eventos->fetchColumn();
 
-    $stmt_total_ingressos = $conn->prepare($sql_total_ingressos);
-    $stmt_total_ingressos->execute($params);
-    $total_ingressos = $stmt_total_ingressos->fetchColumn() ?: 0;
-    
-    // O filtro de data não se aplica a eventos já finalizados de forma lógica, então usamos os params originais.
-    $stmt_eventos_finalizados = $conn->prepare($sql_eventos_finalizados);
+    // 2. Total de ingressos adquiridos em todos os eventos do organizador
+    $stmt_total_ingressos = $conn->prepare(
+        "SELECT SUM(i.quantidade) 
+         FROM inscricoes i 
+         JOIN eventos e ON i.id_evento = e.id 
+         WHERE e.organizador = ?"
+    );
+    $stmt_total_ingressos->execute([$organizador_nome]);
+    $total_ingressos = $stmt_total_ingressos->fetchColumn() ?: 0; // Se for nulo, retorna 0
+
+    // 3. Total de eventos do organizador que já aconteceram (finalizados)
+    $stmt_eventos_finalizados = $conn->prepare("SELECT COUNT(*) FROM eventos WHERE organizador = ? AND data < NOW()");
     $stmt_eventos_finalizados->execute([$organizador_nome]);
     $eventos_finalizados = $stmt_eventos_finalizados->fetchColumn();
 
 } catch (PDOException $e) {
-    $erro_stats = "Não foi possível carregar as estatísticas: " . $e->getMessage();
+    $erro_stats = "Não foi possível carregar as estatísticas.";
 }
 
 include_once("templates/header.php");
 ?>
 <link rel="stylesheet" href="css/style.css">
+<style>
+    /* Estilos para manter o layout similar ao do admin */
+    .dashboard-container { display: flex; gap: 2rem; }
+    .dashboard-sidebar { flex: 0 0 250px; }
+    .dashboard-main { flex: 1; }
+    .sidebar-card { background-color: #fff; padding: 1.5rem; border-radius: 12px; box-shadow: var(--box-shadow-subtle); }
+    .sidebar-card h3 { border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+    .sidebar-card a { display: block; padding: 0.75rem 0; text-decoration: none; color: var(--primary-color); font-weight: 600; border-bottom: 1px solid var(--border-color); }
+    .sidebar-card a:last-child { border-bottom: none; }
+</style>
 
-<main class="form-container">
-    <div class="form-card" style="max-width: 1000px;">
-        <h2>Painel do Organizador</h2>
-        <p>Bem-vindo, <?= htmlspecialchars($organizador_nome) ?>. Aqui estão as estatísticas dos seus eventos.</p>
-
-        <form method="GET" class="filter-form" style="margin-bottom: 2rem; text-align: center;">
-            <h4>Filtrar por Data do Evento</h4>
-            <input type="date" name="data_inicio" value="<?= htmlspecialchars($data_inicio) ?>">
-            <input type="date" name="data_fim" value="<?= htmlspecialchars($data_fim) ?>">
-            <button type="submit" class="btn-primary" style="padding: 0.5rem 1rem;">Filtrar</button>
-            <a href="dashboard_organizador.php" style="text-decoration: none;">Limpar Filtro</a>
-        </form>
+<main class="container">
+    <h2>Painel do Organizador</h2>
+    <div class="dashboard-container">
         
-        <?php if (isset($erro_stats)): ?>
-            <p><?= htmlspecialchars($erro_stats); ?></p>
-        <?php else: ?>
-        <div class="dashboard-grid">
-            <div class="stat-card">
-                <h3>Total de Eventos Criados</h3>
-                <p class="stat-number"><?= $total_eventos ?></p>
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-card">
+                <h3>Ferramentas</h3>
+                <nav>
+                    <a href="gerenciar_eventos.php">Gerenciar Meus Eventos</a>
+                    <a href="gerenciar_ingressos.php">Gerenciar Ingressos</a>
+                    <a href="cadastrar_evento.php">Criar Novo Evento</a>
+                </nav>
             </div>
-            <div class="stat-card">
-                <h3>Ingressos Adquiridos (nos seus eventos)</h3>
-                <p class="stat-number"><?= $total_ingressos ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>Eventos Finalizados</h3>
-                <p class="stat-number"><?= $eventos_finalizados ?></p>
-            </div>
-        </div>
-        <?php endif; ?>
+        </aside>
 
-        <hr style="margin: 2rem 0;">
-        <h3>Ferramentas de Gerenciamento</h3>
-        <div class="dashboard-grid admin-actions">
-            <div class="stat-card">
-                <h3>Eventos</h3>
-                <p>Adicionar, editar e remover seus eventos.</p>
-                <a href="gerenciar_eventos.php">Gerenciar Meus Eventos</a>
+        <section class="dashboard-main">
+            <h3>Visão Geral dos Seus Eventos</h3>
+             <?php if (isset($erro_stats)): ?>
+                <p class="error"><?= htmlspecialchars($erro_stats); ?></p>
+            <?php else: ?>
+            <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="stat-card">
+                    <h3>Eventos Criados</h3>
+                    <p class="stat-number"><?= $total_eventos ?></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Ingressos Vendidos</h3>
+                    <p class="stat-number"><?= $total_ingressos ?></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Eventos Finalizados</h3>
+                    <p class="stat-number"><?= $eventos_finalizados ?></p>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>Ingressos</h3>
-                <p>Visualizar e revogar ingressos dos seus eventos.</p>
-                <a href="gerenciar_ingressos.php">Gerenciar Ingressos</a>
-            </div>
-        </div>
+            <?php endif; ?>
+        </section>
+
     </div>
 </main>
 

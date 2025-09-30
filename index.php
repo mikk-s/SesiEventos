@@ -30,6 +30,12 @@ try {
 } catch(PDOException $e) {
     $eventos_destaque = [];
 }
+if (isset($_SESSION['mensagem']) || isset($_SESSION['erro'])) {
+    $mensagem = $_SESSION['mensagem'] ?? $_SESSION['erro'];
+    echo "<script>alert('" . addslashes($mensagem) . "');</script>";
+    unset($_SESSION['mensagem']);
+    unset($_SESSION['erro']);
+}
 
 include_once("templates/header.php");
 ?>
