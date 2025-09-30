@@ -283,7 +283,7 @@ h1, h2, h3 {
 }
 
 .styled-table th, .styled-table td {
-    padding: 1rem 1.25rem;
+    padding: 1rem 0.25rem;
     border: none;
     text-align: left;
 }

@@ -14,33 +14,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome']; 
     $data = $_POST['data']; 
     $local = $_POST['local'];
-    $max_pessoas = $_POST['max_pessoas']; 
-    // NOVO CAMPO
+    $max_pessoas = isset($_POST['sem_limite']) ? 0 : ($_POST['max_pessoas'] ?? null);
     $limite_por_usuario = $_POST['limite_por_usuario'];
     $origem = $_POST['origem']; 
     $descricao = $_POST['descricao_completa'];
     $imagem_antiga = $_POST['imagem_antiga'];
+    $imagem_path = $imagem_antiga; // Mantém a imagem antiga por padrão
 
-    // Lógica de Upload de Nova Imagem
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
         $target_dir = "img/eventos/";
         $image_name = uniqid() . basename($_FILES["imagem"]["name"]);
         $target_file = $target_dir . $image_name;
         if (move_uploaded_file($_FILES["imagem"]["tmp_name"], $target_file)) {
-            $imagem_path = $target_file; // Atualiza para a nova imagem
-            // Opcional: deletar a imagem antiga do servidor
+            $imagem_path = $target_file;
             if ($imagem_antiga && file_exists($imagem_antiga)) {
                 unlink($imagem_antiga);
             }
         }
     }
-
    
     try {
-        // ATUALIZAÇÃO DA QUERY SQL
         $sql = "UPDATE eventos SET nome = ?, data = ?, local = ?, max_pessoas = ?, limite_por_usuario = ?, origem = ?, descricao_completa = ?, imagem = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        // BIND DO NOVO PARÂMETRO
         $stmt->execute([$nome, $data, $local, $max_pessoas, $limite_por_usuario, $origem, $descricao, $imagem_path, $id_evento]);
         $_SESSION['mensagem'] = "Evento atualizado com sucesso!";
     } catch (PDOException $e) {
@@ -49,15 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: gerenciar_eventos.php");
     exit();
 }
-// Busca dados do evento e locais para preencher o form
+
 $evento_stmt = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
 $evento_stmt->execute([$id_evento]);
 $evento = $evento_stmt->fetch();
 $locais = $conn->query("SELECT sala, bloco FROM locais ORDER BY bloco, sala")->fetchAll();
 
-
 include_once("templates/header.php");
-?><link rel="stylesheet" href="css/style.css">
+?>
+<link rel="stylesheet" href="css/style.css">
 <main class="form-container">
     <div class="form-card" style="max-width: 900px; display: flex; flex-wrap: wrap; gap: 2rem;">
         <div style="flex: 1; min-width: 300px;">
@@ -83,15 +78,20 @@ include_once("templates/header.php");
                     <?php endforeach; ?>
                 </select>
 
-                <div style="display: flex; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
                     <div style="flex: 1;">
                         <label for="max_pessoas">Lotação Máxima:</label>
-                        <input type="number" id="max_pessoas" name="max_pessoas" value="<?= htmlspecialchars($evento['max_pessoas']) ?>" required>
+                        <input type="number" id="max_pessoas" name="max_pessoas" value="<?= htmlspecialchars($evento['max_pessoas']) ?>" min="1">
                     </div>
-                    <div style="flex: 1;">
-                        <label for="limite_por_usuario">Limite por Usuário:</label>
-                        <input type="number" id="limite_por_usuario" name="limite_por_usuario" value="<?= htmlspecialchars($evento['limite_por_usuario']) ?>" required>
+                    <div style="flex: 0 0 auto; padding-bottom: 0.8rem;">
+                        <input type="checkbox" id="sem_limite" name="sem_limite" onchange="toggleMaxPessoas(this)">
+                        <label for="sem_limite">Sem limite de vagas</label>
                     </div>
+                </div>
+
+                <div style="flex: 1;">
+                    <label for="limite_por_usuario">Limite por Usuário:</label>
+                    <input type="number" id="limite_por_usuario" name="limite_por_usuario" value="<?= htmlspecialchars($evento['limite_por_usuario']) ?>" required>
                 </div>
 
                 <label for="origem">Origem:</label>
@@ -124,7 +124,18 @@ include_once("templates/header.php");
 </main>
 
 <script>
-// Script de preview (idêntico ao de cadastrar_evento.php)
+function toggleMaxPessoas(checkbox) {
+    const inputMaxPessoas = document.getElementById('max_pessoas');
+    if (checkbox.checked) {
+        inputMaxPessoas.disabled = true;
+        inputMaxPessoas.required = false;
+        inputMaxPessoas.value = '';
+    } else {
+        inputMaxPessoas.disabled = false;
+        inputMaxPessoas.required = true;
+    }
+}
+
 function updatePreview() {
     document.getElementById('preview-nome').innerText = document.getElementById('nome').value || 'Nome do Evento';
     const origemSelect = document.getElementById('origem');
@@ -140,6 +151,7 @@ function updatePreview() {
         document.getElementById('preview-data').innerText = 'DD/MM/AAAA, HH:MM';
     }
 }
+
 function updatePreviewImage(input) {
     const previewImage = document.getElementById('preview-image');
     if (input.files && input.files[0]) {
@@ -150,8 +162,22 @@ function updatePreviewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-// Chamar a função uma vez no início para popular o preview com os dados existentes
-document.addEventListener('DOMContentLoaded', updatePreview);
+
+document.addEventListener('DOMContentLoaded', function() {
+    const inputMaxPessoas = document.getElementById('max_pessoas');
+    const semLimiteCheckbox = document.getElementById('sem_limite');
+    
+    if (inputMaxPessoas.value === '0') {
+        semLimiteCheckbox.checked = true;
+        inputMaxPessoas.disabled = true;
+        inputMaxPessoas.required = false;
+        inputMaxPessoas.value = '';
+    } else {
+         inputMaxPessoas.required = true;
+    }
+    
+    updatePreview(); // Chamar para popular o preview com os dados iniciais
+});
 </script>
 
 <?php include_once("templates/footer.php"); ?>

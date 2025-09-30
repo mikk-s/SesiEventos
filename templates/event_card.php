@@ -1,4 +1,3 @@
-
 <div class="event-card card">
     <img src="<?= $evento['imagem'] ? $BASE_URL . $evento['imagem'] : $BASE_URL . 'img/placeholder.jpg' ?>" alt="Imagem do Evento: <?= htmlspecialchars($evento['nome']) ?>" class="event-card-image">
     
@@ -7,7 +6,16 @@
         <p class="event-info"><strong>Origem:</strong> <?= htmlspecialchars($evento['origem']) ?></p>
         <p class="event-info">Data: <?= $data_formatada ?></p>
         <p class="event-info">Local: <?= htmlspecialchars($evento['local']) ?></p>
-        <p class="event-info">Vagas: <?= $vagas_restantes > 0 ? $vagas_restantes : 'Esgotado' ?></p>
+        
+        <p class="event-info">Vagas: 
+            <?php 
+                if ($evento['max_pessoas'] > 0) {
+                    echo $vagas_restantes > 0 ? $vagas_restantes : 'Esgotado';
+                } else {
+                    echo 'Ilimitadas';
+                }
+            ?>
+        </p>
         
         <a href="#" class="btn-primary btn-details"
            data-nome="<?= htmlspecialchars($evento['nome']) ?>"
@@ -18,7 +26,7 @@
            data-evento-id="<?= $evento['id'] ?>"
            data-origem="<?= htmlspecialchars($evento['origem']) ?>"
            
-           data-vagas-restantes="<?= $vagas_restantes ?>"
+           data-vagas-restantes="<?= ($evento['max_pessoas'] > 0) ? $vagas_restantes : 'Ilimitadas' ?>"
            data-usuario-logado="<?= $usuario_logado ? 'true' : 'false' ?>"
            data-usuario-inscrito="<?= $usuario_inscrito ? 'true' : 'false' ?>">
            Saiba Mais

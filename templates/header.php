@@ -21,12 +21,11 @@ include_once("helpers/url.php");
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
 <header class="header">
     <div class="container">
       <a href="index.php" class="logo">
-          <img src="img/logo_sesi.png" alt="Logo" class="logo-img">
-          <img src="img/logo_senai.png" alt="Logo" class="logo-img">
+          <img src="img/logo_sesi.png" alt="Logo Sesi" class="logo-img">
+          <img src="img/logo_senai.png" alt="Logo Senai" class="logo-img">
       </a>
       <nav class="nav">
           <a href="eventos.php">Eventos</a>
@@ -34,14 +33,15 @@ include_once("helpers/url.php");
           <?php if (isset($_SESSION['usuario_id'])): ?>
               <a href="meus_ingressos.php">Meus Ingressos</a>
 
-              <?php if (isset($_SESSION['perm']) && in_array($_SESSION['perm'], ['Administrador', 'Organizador'])): ?>
-                  <a href="cadastrar_evento.php">Cadastrar Evento</a>
-                  <a href="gerenciar_eventos.php">Gerenciar Eventos</a>
-              <?php endif; ?>
-              
-              <?php if (isset($_SESSION['perm']) && $_SESSION['perm'] === 'Administrador'): ?>
-                  <a href="dashboard.php">Dashboard</a>
-                
+              <?php if (isset($_SESSION['perm'])): ?>
+                  <?php if ($_SESSION['perm'] == 'Administrador'): ?>
+                      <a href="dashboard.php">Dashboard Admin</a>
+                  <?php endif; ?>
+
+                  <?php if ($_SESSION['perm'] == 'Organizador'): ?>
+                      <a href="cadastrar_evento.php">Cadastrar Evento</a>
+                      <a href="dashboard_organizador.php">Dashboard Organizador</a>
+                  <?php endif; ?>
               <?php endif; ?>
 
               <a href="deslogar.php">Sair</a>

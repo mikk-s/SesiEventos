@@ -24,8 +24,15 @@ document.addEventListener('DOMContentLoaded', function() {
             modalTitle.textContent = button.dataset.nome;
             modalDate.innerHTML = `<strong>Data e Horário:</strong> ${button.dataset.data}`;
             modalLocation.innerHTML = `<strong>Local:</strong> ${button.dataset.local}`;
-            modalCapacity.innerHTML = `<strong>Vagas Restantes:</strong> ${button.dataset.vagasRestantes} de ${button.dataset.pessoas}`;
             modalDescription.textContent = button.dataset.descricao;
+
+            // **CORREÇÃO (MODAL DISPLAY):** Lógica para exibir a capacidade corretamente.
+            const maxPessoas = parseInt(button.dataset.pessoas);
+            if (maxPessoas > 0) {
+                modalCapacity.innerHTML = `<strong>Vagas Restantes:</strong> ${button.dataset.vagasRestantes} de ${button.dataset.pessoas}`;
+            } else {
+                modalCapacity.innerHTML = `<strong>Vagas:</strong> Ilimitadas`;
+            }
 
             const eventoId = button.dataset.eventoId;
             const vagasRestantes = parseInt(button.dataset.vagasRestantes);
@@ -36,18 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isUsuarioLogado) {
                 if (isUsuarioInscrito) {
-                    // Se o usuário já está inscrito, o botão fica desabilitado
                     actionHtml = '<a href="meus_ingressos.php" class="submit-button">Você já está inscrito</a>';
-                } else if (vagasRestantes <= 0) {
-                    // Se não há vagas, o botão fica desabilitado
+                } else if (vagasRestantes <= 0) { // Esta lógica agora funciona por causa da correção no event_card
                     actionHtml = '<button class="submit-button" disabled>Ingressos Esgotados</button>';
                 } else {
-                    // **CORREÇÃO PRINCIPAL AQUI**
-                    // Se o usuário está logado e há vagas, o botão se torna um LINK para a página de adquirir ingresso.
                     actionHtml = `<a href="adquirir_ingresso.php?id_evento=${eventoId}" class="submit-button" style="text-decoration: none;">Adquirir Ingresso</a>`;
                 }
             } else {
-                // Se o usuário não está logado, o botão leva para a página de login.
                 actionHtml = '<a href="login.php" class="submit-button" style="text-decoration: none;">Faça login para adquirir</a>';
             }
 

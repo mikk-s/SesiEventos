@@ -28,8 +28,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome = $_POST['nome'] ?? null;
     $data = $_POST['data'] ?? null;
     $local = $_POST['local'] ?? null;
-    $max_pessoas = $_POST['max_pessoas'] ?? null;
-    // NOVO CAMPO
+    
+    // LÓGICA ATUALIZADA PARA VAGAS ILIMITADAS
+    $max_pessoas = isset($_POST['sem_limite']) ? 0 : ($_POST['max_pessoas'] ?? null);
+
     $limite_por_usuario = $_POST['limite_por_usuario'] ?? null;
     $origem = $_POST['origem'] ?? null;
     $descricao_completa = $_POST['descricao_completa'] ?? null;
@@ -49,11 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    if (empty($nome) || empty($data) || empty($local) || empty($max_pessoas) || empty($limite_por_usuario) || empty($origem)) {
+    if (empty($nome) || empty($data) || empty($local) || empty($limite_por_usuario) || empty($origem)) {
         $_SESSION['mensagem'] = "Erro: Por favor, preencha todos os campos obrigatórios.";
     } else {
         try {
-            // ATUALIZAÇÃO DA QUERY SQL
             $sql = "INSERT INTO eventos (nome, data, local, max_pessoas, limite_por_usuario, origem, descricao_completa, organizador, imagem) 
                     VALUES (:nome, :data, :local, :max_pessoas, :limite_por_usuario, :origem, :descricao_completa, :organizador, :imagem)";
             $stmt = $conn->prepare($sql);
@@ -61,7 +62,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->bindParam(":data", $data);
             $stmt->bindParam(":local", $local);
             $stmt->bindParam(":max_pessoas", $max_pessoas, PDO::PARAM_INT);
-            // BIND DO NOVO PARÂMETRO
             $stmt->bindParam(":limite_por_usuario", $limite_por_usuario, PDO::PARAM_INT);
             $stmt->bindParam(":origem", $origem);
             $stmt->bindParam(":descricao_completa", $descricao_completa);
@@ -117,15 +117,20 @@ include_once("templates/header.php");
                     <?php endif; ?>
                 </select>
 
-                <div style="display: flex; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
                     <div style="flex: 1;">
                         <label for="max_pessoas">Lotação Máxima:</label>
                         <input type="number" id="max_pessoas" name="max_pessoas" min="1" required>
                     </div>
-                    <div style="flex: 1;">
-                        <label for="limite_por_usuario">Limite por Usuário:</label>
-                        <input type="number" id="limite_por_usuario" name="limite_por_usuario" min="1" value="10" required>
+                    <div style="flex: 0 0 auto; padding-bottom: 0.8rem;">
+                        <input type="checkbox" id="sem_limite" name="sem_limite" onchange="toggleMaxPessoas(this)">
+                        <label for="sem_limite">Sem limite de vagas</label>
                     </div>
+                </div>
+
+                <div style="flex: 1;">
+                    <label for="limite_por_usuario">Limite por Usuário:</label>
+                    <input type="number" id="limite_por_usuario" name="limite_por_usuario" min="1" value="10" required>
                 </div>
 
                 <label for="origem">Origem:</label>
@@ -158,21 +163,26 @@ include_once("templates/header.php");
 </main>
 
 <script>
-function updatePreview() {
-    // Atualiza o Nome
-    document.getElementById('preview-nome').innerText = document.getElementById('nome').value || 'Nome do Evento';
+function toggleMaxPessoas(checkbox) {
+    const inputMaxPessoas = document.getElementById('max_pessoas');
+    if (checkbox.checked) {
+        inputMaxPessoas.disabled = true;
+        inputMaxPessoas.required = false;
+        inputMaxPessoas.value = '';
+    } else {
+        inputMaxPessoas.disabled = false;
+        inputMaxPessoas.required = true;
+    }
+}
 
-    // Atualiza a Origem
+function updatePreview() {
+    document.getElementById('preview-nome').innerText = document.getElementById('nome').value || 'Nome do Evento';
     const origemSelect = document.getElementById('origem');
     const origemValue = origemSelect.options[origemSelect.selectedIndex].text;
     document.getElementById('preview-origem').innerText = origemValue.startsWith('--') ? 'Origem' : origemValue;
-
-    // Atualiza o Local
     const localSelect = document.getElementById('local');
     const localValue = localSelect.options[localSelect.selectedIndex].text;
     document.getElementById('preview-local').innerText = localValue.startsWith('--') ? 'Local do Evento' : localValue;
-
-    // Formata e Atualiza a Data
     const dataValue = document.getElementById('data').value;
     if (dataValue) {
         const date = new Date(dataValue);
@@ -189,15 +199,11 @@ function updatePreviewImage(input) {
         var reader = new FileReader();
         reader.onload = function (e) {
             previewImage.setAttribute('src', e.target.result);
-            previewImage.style.display = 'block';
         };
         reader.readAsDataURL(input.files[0]);
-    } else {
-        previewImage.setAttribute('src', 'img/placeholder.jpg'); // Volta para o placeholder se nenhuma imagem for selecionada
     }
 }
 
-// Chamar a função uma vez no início para garantir que o preview esteja sincronizado
 document.addEventListener('DOMContentLoaded', updatePreview);
 </script>
 
